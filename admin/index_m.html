@@ -64,42 +64,24 @@
 <body>
 
     <div class="m adapter-container">
-
-        <div class="row">
-            <table>
-                <tr>
-                  <td><img src="hydrawise.png" width="64" height="64"></td>
-                  <td><h3 class="translate">Hydrawis HC6 adapter settings</h3></td>
-                </tr>
-            </table>
-
-//<div class="col s12 m4 l2">
-//<img src="hydrawise.png" class="logo">
-//</div>
-
-        </div>
+       <div class="col s12 m4 l2">
+           <img src="hydrawise.png" class="logo">
+       </div>
+    </div>
 
         <!-- Put your content here -->
-        <div class="row">
-            <table>
-              <tr>
-                <td colspan="3"><b><label class="translate">prowl</label></b></td>
-              </tr>
-              <tr>
-                <td><label class="translate" for="prowl_apikey">prowlapi</label></td>
-                <td class="admin-icon"></td>
-                <td><input type="text" size=50 id="prowl_apikey" class="value"></td>
-              </tr>
-              <tr>
-                <td colspan="3"><b><label class="translate">hydrawise</label></b></td>
-              </tr>
-              <tr>
-                <td><label class="translate" for="hydrawise_apikey">hydrawiseapi</label></td>
-                <td class="admin-icon"></td>
-                <td><input type="text" size=50 id="hydrawise_apikey" class="value"></td>
-              </tr>
-            </table>
+
+      <div class="row">
+         <div class="col s6 input-field">
+            <input type="text" size=50 id="hydrawise_apikey" class="value" />
+            <label for="hydrawise_apikey" class="translate">hydrawiseapi</label>
         </div>
+
+        <div class="col s6 input-field">
+            <input type="text" size=50 id="prowl_apikey" class="value" />
+            <label for="prowl_apikey" class="translate">prowlapi</label>
+        </div>
+      </div>
 
         <!-- For example columns with settings: -->
         <div class="row">
