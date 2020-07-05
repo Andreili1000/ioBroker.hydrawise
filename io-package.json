@@ -5,17 +5,17 @@
         "news": {
             "0.0.1": {
                 "en": "initial release",
-                "de": "Erstveröffentlichung",
+                "de": "Erstveröffentlichung"
             }
         },
         "title": "Hydrawise HC6",
         "titleLang": {
             "en": "Adapter for Hydrawise HC6)",
-            "de": "Hydrawise HC6 Adapter",
+            "de": "Hydrawise HC6 Adapter"
         },
         "desc": {
             "en": "controls the Hydrawise HC6 adapter via REST interface",
-            "de": "Steuert den Hydrawise HC6 adapter über das REST interface",
+            "de": "Steuert den Hydrawise HC6 adapter über das REST interface"
         },
         "authors": [
             "Andreili1000 <60061677+Andreili1000@users.noreply.github.com>"
@@ -43,7 +43,7 @@
             "singleton": true,
             "name": {
                 "en": "Hydrawise HC6",
-                "de": "Hydrawise HC6",
+                "de": "Hydrawise HC6"
             },
             "link": "",
             "fa-icon": "info"
