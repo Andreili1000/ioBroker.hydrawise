@@ -51,7 +51,7 @@
     "lint": "eslint"
   },
   "bugs": {
-    "url": "https://github.com/Author/ioBroker.template/issues"
+    "url": "https://github.com/Andreili1000/ioBroker.hydrawise/issues"
   },
   "readmeFilename": "README.md"
 }
