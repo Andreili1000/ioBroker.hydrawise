@@ -11,36 +11,6 @@ const utils = require('@iobroker/adapter-core');
 // Load your modules here, e.g.:
 // const fs = require("fs");
 
-
-// Hydrawise REST API definitions
-
-var hydrawise_api  = "";
-var url_status     = "https://app.hydrawise.com/api/v1/statusschedule.php?";
-var url_command    = "https://app.hydrawise.com/api/v1/setzone.php?";
-
-// HC6 controller state definition
-
-var relay    = {name:"", period:0, relay:0, id:0, run:0, time:0, timestr:"", type:0};
-var sensor   = {input:0, mode:0, offtimer:0, relay1:0, relay2:0, relay3:0, relay4:0, relay5:0, relay6:0, timer:0, type:0};
-var relays   = {relay,relay,relay,relay,relay,relay};  // Zone information of Zone 1-6
-var sensors  = {sensor, sensor};                       // Sensor information of Sensors 1-2
-var message  = "";                                     // Status message for account
-var nextpoll = 0;                                      // Indication of number of seconds until you should make your next request to this endpoint
-var time     = 0;                                      // UNIX epoche
-
-// Prowl API definitions
-
-var prowl_api = "";
-
-function clear_status() {
-  relays  = {relay,relay,relay,relay,relay,relay};  // Zone information of Zone 1-6
-  sensors = {sensor,sensor};                        // Sensor information of Sensors 1-2
-  message = "";
-  nextpoll = 0;
-  time = 0;
-}
-
-
 class Hydrawise extends utils.Adapter {
 
     /**
@@ -56,6 +26,34 @@ class Hydrawise extends utils.Adapter {
         // this.on('objectChange', this.onObjectChange.bind(this));
         // this.on('message', this.onMessage.bind(this));
         this.on('unload', this.onUnload.bind(this));
+    }
+
+    // Hydrawise REST API definitions
+
+    var hydrawise_api  = "";
+    var url_status     = "https://app.hydrawise.com/api/v1/statusschedule.php?";
+    var url_command    = "https://app.hydrawise.com/api/v1/setzone.php?";
+
+    // HC6 controller state definition
+
+    var relay    = {name:"", period:0, relay:0, id:0, run:0, time:0, timestr:"", type:0};
+    var sensor   = {input:0, mode:0, offtimer:0, relay1:0, relay2:0, relay3:0, relay4:0, relay5:0, relay6:0, timer:0, type:0};
+    var relays   = {relay,relay,relay,relay,relay,relay};  // Zone information of Zone 1-6
+    var sensors  = {sensor, sensor};                       // Sensor information of Sensors 1-2
+    var message  = "";                                     // Status message for account
+    var nextpoll = 0;                                      // Indication of number of seconds until you should make your next request to this endpoint
+    var time     = 0;                                      // UNIX epoche
+
+    // Prowl API definitions
+
+    var prowl_api = "";
+
+    function clear_status() {
+      relays  = {relay,relay,relay,relay,relay,relay};  // Zone information of Zone 1-6
+      sensors = {sensor,sensor};                        // Sensor information of Sensors 1-2
+      message = "";
+      nextpoll = 0;
+      time = 0;
     }
 
     /**
