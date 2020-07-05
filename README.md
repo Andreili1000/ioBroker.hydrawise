@@ -1,5 +1,5 @@
-![Logo](admin/template.png)
-# ioBroker.template
+![Logo](admin/hydrawise.png)
+# ioBroker.hydrawise
 
 [![NPM version](http://img.shields.io/npm/v/iobroker.template.svg)](https://www.npmjs.com/package/iobroker.template)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.template.svg)](https://www.npmjs.com/package/iobroker.template)
@@ -12,7 +12,7 @@
 
 **Tests:**: [![Travis-CI](http://img.shields.io/travis/Author/ioBroker.template/master.svg)](https://travis-ci.org/Author/ioBroker.template)
 
-## template adapter for ioBroker
+## Hydrawise adapter for ioBroker
 
 Template for adapter development
 
@@ -54,18 +54,18 @@ Several npm scripts are predefined for your convenience. You can run them using 
 | `lint` | Runs `ESLint` to check your code for formatting errors and potential bugs. |
 
 ### Writing tests
-When done right, testing code is invaluable, because it gives you the 
-confidence to change your code while knowing exactly if and when 
-something breaks. A good read on the topic of test-driven development 
-is https://hackernoon.com/introduction-to-test-driven-development-tdd-61a13bc92d92. 
-Although writing tests before the code might seem strange at first, but it has very 
+When done right, testing code is invaluable, because it gives you the
+confidence to change your code while knowing exactly if and when
+something breaks. A good read on the topic of test-driven development
+is https://hackernoon.com/introduction-to-test-driven-development-tdd-61a13bc92d92.
+Although writing tests before the code might seem strange at first, but it has very
 clear upsides.
 
 The template provides you with basic tests for the adapter startup and package files.
 It is recommended that you add your own tests into the mix.
 
 ### Publishing the adapter
-To get your adapter released in ioBroker, please refer to the documentation 
+To get your adapter released in ioBroker, please refer to the documentation
 of [ioBroker.repositories](https://github.com/ioBroker/ioBroker.repositories#requirements-for-adapter-to-get-added-to-the-latest-repository).
 
 ### Test the adapter manually on a local ioBroker installation
@@ -88,7 +88,7 @@ For later updates, the above procedure is not necessary. Just do the following:
 ## Changelog
 
 ### 0.0.1
-* (Author) initial release
+* (Andreili1000) initial release
 
 ## License
 MIT License
