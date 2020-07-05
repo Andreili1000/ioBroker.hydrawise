@@ -1,22 +1,22 @@
 {
-  "name": "iobroker.template",
+  "name": "iobroker.hydrawise",
   "version": "0.0.1",
-  "description": "Template for adapter development",
+  "description": "Adapter for Hydrawise HC6",
   "author": {
-    "name": "Author",
+    "name": "Andreili1000",
     "email": "author@mail.com"
   },
-  "homepage": "https://github.com/Author/ioBroker.template",
+  "homepage": "https://github.com/Andreili1000/ioBroker.hydrawise",
   "license": "MIT",
   "keywords": [
     "ioBroker",
-    "template",
+    "Hydrawise",
     "Smart Home",
     "home automation"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Author/ioBroker.template"
+    "url": "https://github.com/Andreili1000/ioBroker.hydrawise"
   },
   "dependencies": {
     "@iobroker/adapter-core": "^2.4.0"
