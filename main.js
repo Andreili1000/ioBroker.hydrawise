@@ -25,7 +25,7 @@ let relays   = {relay,relay,relay,relay,relay,relay};  // Zone information of Zo
 let sensors  = {sensor, sensor};                       // Sensor information of Sensors 1-2
 let message  = "";                                     // Status message for account
 let nextpoll = 0;                                      // Indication of number of seconds until you should make your next request to this endpoint
-let time     = 1000;                                      // UNIX epoche
+let time     = 0;                                      // UNIX epoche
 
 // Prowl API definitions
 
@@ -65,12 +65,10 @@ class Hydrawise extends utils.Adapter {
 
         // The adapters config (in the instance object everything under the attribute "native") is accessible via
         // this.config:
-        hydrawise_api = this.config.hydrawise_api;
+        hydrawise_api = this.config.hydrawise_apikey;
         this.log.info('Hydrawise API key: ' + hydrawise_api);
-        prowl_api = this.config.prowl_api;
+        prowl_api = this.config.prowl_apikey;
         this.log.info('Prowl API key: ' + prowl_api);
-
-        this.log.info('Prowl API key: ' + time);
 
         /*
         For every state in the system there has to be also an object of type state

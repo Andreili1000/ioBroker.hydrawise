@@ -55,10 +55,64 @@
             }
         ]
     },
-    "native": {
-        "option1": true,
-        "option2": "42"
-    },
+    "native": {},
     "objects": [],
-    "instanceObjects": []
+    "instanceObjects": [
+      {
+        "_id": "command",
+        "type": "state",
+        "common": {
+          "name": "Hydrawise command REST API",
+          "type": "string",
+          "role": "value",
+          "read": true,
+          "write": true,
+          "def": "stopall",
+          "desc": "command to be executed by Hunter HC6"
+        },
+        "native": {}
+      },
+      {
+        "_id": "zone",
+        "type": "state",
+        "common": {
+          "name": "zone number",
+          "type": "number",
+          "role": "value",
+          "read": true,
+          "write": true,
+          "def": 1,
+          "desc": "zone number 1-6 to execute command for"
+        },
+        "native": {}
+      },
+      {
+        "_id": "custom_run",
+        "type": "state",
+        "common": {
+          "name": "run time",
+          "type": "number",
+          "role": "value",
+          "read": true,
+          "write": true,
+          "def": 1,
+          "desc": "number of seconds to run zone(s) for"
+        },
+        "native": {}
+      },
+      {
+        "_id": "custom_suspend",
+        "type": "state",
+        "common": {
+          "name": "suspend time",
+          "type": "number",
+          "role": "value",
+          "read": true,
+          "write": true,
+          "def": 1924902002,
+          "desc": "UNIX time epoch to suspend the zone until"
+        },
+        "native": {}
+      }
+    ]
 }
