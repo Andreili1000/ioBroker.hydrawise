@@ -130,6 +130,11 @@ class Hydrawise extends utils.Adapter {
       	});
         */
 
+       // initialize internal copy of state variables
+       this.setStateInternal('custom_run', 0);
+       this.setStateInternal('custom_suspend', 0);
+       this.setStateInternal('zone',0),
+
         /*
         For every state in the system there has to be also an object of type state
         Here a simple template for a boolean variable named "testVariable"

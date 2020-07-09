@@ -67,7 +67,7 @@
           "role": "value",
           "read": true,
           "write": true,
-          "def": "stopall",
+          "def": "",
           "desc": "command to be executed by Hunter HC6"
         },
         "native": {}
@@ -81,7 +81,7 @@
           "role": "value",
           "read": true,
           "write": true,
-          "def": 1,
+          "def": 0,
           "desc": "zone number 1-6 to execute command for"
         },
         "native": {}
@@ -95,7 +95,7 @@
           "role": "value",
           "read": true,
           "write": true,
-          "def": 1,
+          "def": 0,
           "desc": "number of seconds to run zone(s) for"
         },
         "native": {}
@@ -109,7 +109,7 @@
           "role": "value",
           "read": true,
           "write": true,
-          "def": 1924902002,
+          "def": 0,
           "desc": "UNIX time epoch to suspend the zone until"
         },
         "native": {}
