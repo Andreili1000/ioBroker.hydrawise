@@ -41,27 +41,6 @@ let prowl_api = "";
 
 
 //
-// reads value out of local copy of state variable "id"
-//
-function getStateInternal(id) {
- var obj = id;
- if (! obj.startsWith(this.namespace + '.'))
-   obj = this.namespace + '.' + id;
- return currentStateValues[obj];
-}
-
-//
-// updates local copy of state variable "id" with value "value"
-//
-function setStateInternal(id, value) {
- var obj = id;
- if (! obj.startsWith(this.namespace + '.'))
-   obj = this.namespace + '.' + id;
- this.log.info('update state ' + obj + ' with value:' + value);
- currentStateValues[obj] = value;
-}
-
-//
 // Hydrawise Adapter functions
 //
 
@@ -72,7 +51,6 @@ function clear_status() {
   nextpoll = 0;
   time = 0;
 }
-
 
 
 class Hydrawise extends utils.Adapter {
@@ -230,7 +208,7 @@ class Hydrawise extends utils.Adapter {
 
             // The state was changed
             // update local copy of that state variable
-            setStateInternal(id, state.val);
+            this.setStateInternal(id, state.val);
             //this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
 
             // execute commands
@@ -271,6 +249,31 @@ class Hydrawise extends utils.Adapter {
     //         }
     //     }
     // }
+
+
+    //
+    // define additional functions/methods here
+
+    //
+    // reads value out of local copy of state variable "id"
+    //
+    getStateInternal(id) {
+     var obj = id;
+     if (! obj.startsWith(this.namespace + '.'))
+       obj = this.namespace + '.' + id;
+     return currentStateValues[obj];
+    }
+
+    //
+    // updates local copy of state variable "id" with value "value"
+    //
+    setStateInternal(id, value) {
+     var obj = id;
+     if (! obj.startsWith(this.namespace + '.'))
+       obj = this.namespace + '.' + id;
+     this.log.info('update state ' + obj + ' with value:' + value);
+     currentStateValues[obj] = value;
+    }
 
 }
 
