@@ -122,7 +122,7 @@ class Hydrawise extends utils.Adapter {
         // Or, if you really must, you can also watch all states. Don't do this if you don't need to. Otherwise this will cause a lot of unnecessary load on the system:
         // this.subscribeStates('*');
 
-        this.subscribeStates(*);
+        this.subscribeStates('*');
 
         /*
             setState examples
