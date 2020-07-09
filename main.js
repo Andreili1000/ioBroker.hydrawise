@@ -11,14 +11,21 @@ const utils = require('@iobroker/adapter-core');
 // Load your modules here, e.g.:
 // const fs = require("fs");
 
+//
 // Hydrawise REST API definitions
-
+//
 let hydrawise_api  = "";
 let url_status     = "https://app.hydrawise.com/api/v1/statusschedule.php?";
 let url_command    = "https://app.hydrawise.com/api/v1/setzone.php?";
 
-// HC6 controller state definition
+//
+// local copy of state variables (array)
+//
+let currentStateValues = {};
 
+//
+// HC6 controller state definition
+//
 let relay    = {name:"", period:0, relay:0, id:0, run:0, time:0, timestr:"", type:0};
 let sensor   = {input:0, mode:0, offtimer:0, relay1:0, relay2:0, relay3:0, relay4:0, relay5:0, relay6:0, timer:0, type:0};
 let relays   = {relay,relay,relay,relay,relay,relay};  // Zone information of Zone 1-6
@@ -27,17 +34,11 @@ let message  = "";                                     // Status message for acc
 let nextpoll = 0;                                      // Indication of number of seconds until you should make your next request to this endpoint
 let time     = 0;                                      // UNIX epoche
 
+//
 // Prowl API definitions
-
+//
 let prowl_api = "";
 
-function clear_status() {
-  relays  = {relay,relay,relay,relay,relay,relay};  // Zone information of Zone 1-6
-  sensors = {sensor,sensor};                        // Sensor information of Sensors 1-2
-  message = "";
-  nextpoll = 0;
-  time = 0;
-}
 
 class Hydrawise extends utils.Adapter {
 
@@ -49,6 +50,7 @@ class Hydrawise extends utils.Adapter {
             ...options,
             name: 'hydrawise',
         });
+        // maps adapter states to functions onReady, onStateChange, onObjectChange onMessage, onUnload
         this.on('ready', this.onReady.bind(this));
         this.on('stateChange', this.onStateChange.bind(this));
         // this.on('objectChange', this.onObjectChange.bind(this));
@@ -69,6 +71,30 @@ class Hydrawise extends utils.Adapter {
         this.log.info('Hydrawise API key: ' + hydrawise_api);
         prowl_api = this.config.prowl_apikey;
         this.log.info('Prowl API key: ' + prowl_api);
+
+
+        // initializes internal copy of all state variables
+      	this.getStates('*', function (err, obj) {
+      		if (err) {
+      			this.log.error('error reading states: ' + err);
+      		} else {
+      			if (obj) {
+      				for (var i in obj) {
+      					if (! obj.hasOwnProperty(i)) continue;
+      					if (obj[i] !== null) {
+      						if (typeof obj[i] == 'object') {
+      							setStateInternal(i, obj[i].val);
+      						} else {
+      							this.log.error('unexpected state value: ' + obj[i]);
+      						}
+      					}
+      		        }
+      			} else {
+      				this.log.error("no states found");
+      			}
+      		}
+      	});
+
 
         /*
         For every state in the system there has to be also an object of type state
@@ -96,7 +122,7 @@ class Hydrawise extends utils.Adapter {
         // Or, if you really must, you can also watch all states. Don't do this if you don't need to. Otherwise this will cause a lot of unnecessary load on the system:
         // this.subscribeStates('*');
 
-        this.subscribeStates('command');
+        this.subscribeStates(*);
 
         /*
             setState examples
@@ -164,32 +190,27 @@ class Hydrawise extends utils.Adapter {
      */
     onStateChange(id, state) {
 
+    // Warning: state can be null if it was deleted!
         if (state) {
+
             // The state was changed
-            this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
+            // update local copy of that state variable
+            setStateInternal(id, state.val);
+            //this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
 
+            // execute commands
             switch (id){
-              //
-              // execute hydrawise command
-              //
               case this.namespace + '.command':
-
-                // lese custom_run, custom_suspend, zone ein
-                var custom_run = this.getState('custom_run').val;
-                //var custom_suspend = getState(this.namespace + '.custom_suspend').val;
-                //var custom_zone = getState(this.namespace + '.custom_zone').val;
-                this.log.info(`custom_run = ${custom_run}`);
-
                 // evaluate command
                 switch (state.val){
-                  case "run": this.log.info("run");break;
-                  case "stop": this.log.info("stop");break;
-                  case "suspend": this.log.info("suspend");break;
-                  case "runall": this.log.info("runall");break;
-                  case "stopall": this.log.info("stopall");break;
-                  case "suspendall": this.log.info("suspendall");break;
+                  case "run": this.log.info("execute run");break;
+                  case "stop": this.log.info("execute stop");break;
+                  case "suspend": this.log.info("execute suspend");break;
+                  case "runall": this.log.info("execute runall");break;
+                  case "stopall": this.log.info("execute stopall");break;
+                  case "suspendall": this.log.info("execute suspendall");break;
                 }
-                break;
+              break;
             }
 
         } else {
@@ -215,6 +236,50 @@ class Hydrawise extends utils.Adapter {
     //         }
     //     }
     // }
+
+   // add other functions of adapter here
+
+   //
+   // reads value out of local copy of state variable "id"
+   //
+   function getStateInternal(id) {
+   	var obj = id;
+   	if (! obj.startsWith(this.namespace + '.'))
+   		obj = this.namespace + '.' + id;
+   	return currentStateValues[obj];
+   }
+
+   //
+   // updates local copy of state variable "id" with value "value"
+   //
+   function setStateInternal(id, value) {
+   	var obj = id;
+   	if (! obj.startsWith(this.namespace + '.'))
+   		obj = this.namespace + '.' + id;
+   	this.log.info('update state ' + obj + ' with value:' + value);
+    currentStateValues[obj] = value;
+   }
+
+
+
+
+
+
+
+
+   //
+   // Hydrawise Adapter functions
+   //
+
+   function clear_status() {
+     relays  = {relay,relay,relay,relay,relay,relay};  // Zone information of Zone 1-6
+     sensors = {sensor,sensor};                        // Sensor information of Sensors 1-2
+     message = "";
+     nextpoll = 0;
+     time = 0;
+   }
+
+
 
 }
 
