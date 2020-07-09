@@ -96,7 +96,7 @@ class Hydrawise extends utils.Adapter {
       					if (! obj.hasOwnProperty(i)) continue;
       					if (obj[i] !== null) {
       						if (typeof obj[i] == 'object') {
-      							setStateInternal(i, obj[i].val);
+      							this.setStateInternal(i, obj[i].val);
       						} else {
       							this.log.error('unexpected state value: ' + obj[i]);
       						}
