@@ -40,6 +40,41 @@ let time     = 0;                                      // UNIX epoche
 let prowl_api = "";
 
 
+//
+// reads value out of local copy of state variable "id"
+//
+function getStateInternal(id) {
+ var obj = id;
+ if (! obj.startsWith(this.namespace + '.'))
+   obj = this.namespace + '.' + id;
+ return currentStateValues[obj];
+}
+
+//
+// updates local copy of state variable "id" with value "value"
+//
+function setStateInternal(id, value) {
+ var obj = id;
+ if (! obj.startsWith(this.namespace + '.'))
+   obj = this.namespace + '.' + id;
+ this.log.info('update state ' + obj + ' with value:' + value);
+ currentStateValues[obj] = value;
+}
+
+//
+// Hydrawise Adapter functions
+//
+
+function clear_status() {
+  relays  = {relay,relay,relay,relay,relay,relay};  // Zone information of Zone 1-6
+  sensors = {sensor,sensor};                        // Sensor information of Sensors 1-2
+  message = "";
+  nextpoll = 0;
+  time = 0;
+}
+
+
+
 class Hydrawise extends utils.Adapter {
 
     /**
@@ -236,50 +271,6 @@ class Hydrawise extends utils.Adapter {
     //         }
     //     }
     // }
-
-   // add other functions of adapter here
-
-   //
-   // reads value out of local copy of state variable "id"
-   //
-   function getStateInternal(id) {
-   	var obj = id;
-   	if (! obj.startsWith(this.namespace + '.'))
-   		obj = this.namespace + '.' + id;
-   	return currentStateValues[obj];
-   }
-
-   //
-   // updates local copy of state variable "id" with value "value"
-   //
-   function setStateInternal(id, value) {
-   	var obj = id;
-   	if (! obj.startsWith(this.namespace + '.'))
-   		obj = this.namespace + '.' + id;
-   	this.log.info('update state ' + obj + ' with value:' + value);
-    currentStateValues[obj] = value;
-   }
-
-
-
-
-
-
-
-
-   //
-   // Hydrawise Adapter functions
-   //
-
-   function clear_status() {
-     relays  = {relay,relay,relay,relay,relay,relay};  // Zone information of Zone 1-6
-     sensors = {sensor,sensor};                        // Sensor information of Sensors 1-2
-     message = "";
-     nextpoll = 0;
-     time = 0;
-   }
-
-
 
 }
 
