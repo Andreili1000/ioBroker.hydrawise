@@ -107,7 +107,7 @@ class Hydrawise extends utils.Adapter {
         this.log.info('Prowl API key: ' + prowl_api);
 
 
-        // initializes internal copy of all state variables
+        /* initializes internal copy of all state variables
       	this.getStates('*', function (err, obj) {
       		if (err) {
       			this.log.error('error reading states: ' + err);
@@ -128,7 +128,7 @@ class Hydrawise extends utils.Adapter {
       			}
       		}
       	});
-
+        */
 
         /*
         For every state in the system there has to be also an object of type state
@@ -270,7 +270,7 @@ class Hydrawise extends utils.Adapter {
     //         }
     //     }
     // }
-    
+
 }
 
 // @ts-ignore parent is a valid property on module
