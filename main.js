@@ -71,6 +71,27 @@ class Hydrawise extends utils.Adapter {
         this.on('unload', this.onUnload.bind(this));
     }
 
+    //
+    // reads value out of local copy of state variable "id"
+    //
+    getStateInternal(id) {
+     var obj = id;
+     if (! obj.startsWith(this.namespace + '.'))
+       obj = this.namespace + '.' + id;
+     return currentStateValues[obj];
+    }
+
+    //
+    // updates local copy of state variable "id" with value "value"
+    //
+    setStateInternal(id, value) {
+     var obj = id;
+     if (! obj.startsWith(this.namespace + '.'))
+       obj = this.namespace + '.' + id;
+     this.log.info('update state ' + obj + ' with value:' + value);
+     currentStateValues[obj] = value;
+    }
+
 
     /**
      * Is called when databases are connected and adapter received configuration.
@@ -249,32 +270,7 @@ class Hydrawise extends utils.Adapter {
     //         }
     //     }
     // }
-
-
-    //
-    // define additional functions/methods here
-
-    //
-    // reads value out of local copy of state variable "id"
-    //
-    getStateInternal(id) {
-     var obj = id;
-     if (! obj.startsWith(this.namespace + '.'))
-       obj = this.namespace + '.' + id;
-     return currentStateValues[obj];
-    }
-
-    //
-    // updates local copy of state variable "id" with value "value"
-    //
-    setStateInternal(id, value) {
-     var obj = id;
-     if (! obj.startsWith(this.namespace + '.'))
-       obj = this.namespace + '.' + id;
-     this.log.info('update state ' + obj + ' with value:' + value);
-     currentStateValues[obj] = value;
-    }
-
+    
 }
 
 // @ts-ignore parent is a valid property on module
