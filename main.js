@@ -175,10 +175,10 @@ class Hydrawise extends utils.Adapter {
               case this.namespace + '.command':
 
                 // lese custom_run, custom_suspend, zone ein
-                var custom_run = getState(this.namespace + '.custom_run').val;
-                var custom_suspend = getState(this.namespace + '.custom_suspend').val;
-                var custom_zone = getState(this.namespace + '.custom_zone').val;
-                this.log.info(`custom_run = ${custom_run}, custom_suspend = ${custom_suspend}, zone = ${zone}`);
+                var custom_run = this.getState(this.namespace+'.custom_run').val;
+                //var custom_suspend = getState(this.namespace + '.custom_suspend').val;
+                //var custom_zone = getState(this.namespace + '.custom_zone').val;
+                this.log.info(`custom_run = ${custom_run}`);
 
                 // evaluate command
                 switch (state.val){
