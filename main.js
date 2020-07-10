@@ -8,13 +8,12 @@
 // you need to create an adapter
 const utils = require('@iobroker/adapter-core');
 
-//
-var request = require('request');
-
-
 // Load your modules here, e.g.:
 // const fs = require("fs");
 
+var request = require('request');
+
+var adapter = new Hydrawise();
 
 // Prowl API definitions
 //
@@ -296,5 +295,5 @@ class Hydrawise extends utils.Adapter {
 //    module.exports = (options) => var adapter = new Hydrawise(options);
 //} else {
     // otherwise start the instance directly
-    var adapter = new Hydrawise();
+//    var adapter = new Hydrawise();
 //}
