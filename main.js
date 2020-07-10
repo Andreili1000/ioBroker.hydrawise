@@ -89,14 +89,20 @@ class Hydrawise extends utils.Adapter {
     // reads Hydrawise status via REST interface
     //
     getHydrawiseStatus() {
-      request(hydrawise_url_status + "api_key=" + this.config.hydrawise_apikey, function(error, response, body){
-        var json = JSON.parse(body);
+      const cmd = hydrawise_url_status + "api_key=" + this.config.hydrawise_apikey;
+
+      this.log.info("send: "+cmd);
+      request(cmd, function(error, response, body){
+
+        this.log.info("error:"+error+" response:"+response+" body:"+body);
+
+//        var json = JSON.parse(body);
 
         // update system data
-        hc6.time = parseInt(json.time);
-        hc6.nextpoll = parseInt(json.nextpoll);
-        hc6.message = json.message;
-        this.log.info("time="+hc6.time+" nextpoll="+hc6.nextpoll+" message="+hc6.message);
+//        hc6.time = parseInt(json.time);
+//        hc6.nextpoll = parseInt(json.nextpoll);
+//        hc6.message = json.message;
+//        this.log.info("time="+hc6.time+" nextpoll="+hc6.nextpoll+" message="+hc6.message);
       });
     }
 
