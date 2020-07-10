@@ -15,6 +15,12 @@ var request = require('request');
 // Load your modules here, e.g.:
 // const fs = require("fs");
 
+
+// Prowl API definitions
+//
+const prowl_application = adapter.namespace;
+const prowl_url         = "http://prowl.weks.net/publicapi/add?apikey="
+
 //
 // Hydrawise REST API definitions
 //
@@ -70,10 +76,6 @@ class Hydrawise extends utils.Adapter {
         this.on('unload', this.onUnload.bind(this));
     }
 
-    // Prowl API definitions
-    //
-    const prowl_application = this.namespace;
-    const prowl_url         = "http://prowl.weks.net/publicapi/add?apikey="
 
     //
     // reads value out of local copy of state variable "id"
@@ -290,8 +292,8 @@ if (module.parent) {
     /**
      * @param {Partial<utils.AdapterOptions>} [options={}]
      */
-    module.exports = (options) => new Hydrawise(options);
+    module.exports = (options) => var adapter = new Hydrawise(options);
 } else {
     // otherwise start the instance directly
-    new Hydrawise();
+    var adapter = new Hydrawise();
 }
