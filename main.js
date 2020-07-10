@@ -86,34 +86,35 @@ class Hydrawise extends utils.Adapter {
     }
 
     //
-    // reads Hydrawise status via REST interface
+    // reads Hydrawise status via REST interface asynchronously
     //
-    getHydrawiseStatus() {
+    requestHydrawiseStatus(callback) {
       const cmd = hydrawise_url_status + "api_key=" + this.config.hydrawise_apikey;
 
       this.log.info("send: "+cmd);
-
-      var hc6_error;
-      var hc6_response;
-      var hc6_body;
-
-      request(cmd, function(error, response, body){
-
-        hc6_error=error;
-        hc6_response=response;
-        hc6_body=body;
-
-//        var json = JSON.parse(body);
-
-        // update system data
-//        hc6.time = parseInt(json.time);
-//        hc6.nextpoll = parseInt(json.nextpoll);
-//        hc6.message = json.message;
-//        this.log.info("time="+hc6.time+" nextpoll="+hc6.nextpoll+" message="+hc6.message);
+      request({url: cmd, json: true}, function(error, response, body){
+        if (error || response.statusCode !== 200) {
+          return callback(error || {statusCode: response.statusCode});
+        }
+        // calls callback function once response is there
+        callback(null, JSON.parse(body));
       });
-
-      this.log.info("error="+hc6_error+" response="+hc6_response+" body="+hc6_body);
     }
+
+    readHydrawiseStatus(){
+      // handover callback function
+      this.requestHydrawiseStatus(function(err, body) {
+        if (err) {
+          this.log.error(err);
+        } else {
+          // update system data
+          hc6.time = parseInt(body.time);
+          hc6.nextpoll = parseInt(body.nextpoll);
+          hc6.message = body.message;
+          this.log.info("time="+hc6.time+" nextpoll="+hc6.nextpoll+" message="+hc6.message);
+        }
+      });
+    };
 
     //
     // retrieves relay_id of Zone 1..6
