@@ -26,9 +26,9 @@ let currentStateValues = {};  // always keep the last value of the state variabl
 // HC6 controller state definition
 //
 let relay        = {name:"", period:0, relay:0, id:0, run:0, time:0, timestr:"", type:0};
-let arr_sensors  = {input:0, mode:0, offtimer:0, relay1:0, relay2:0, relay3:0, relay4:0, relay5:0, relay6:0, timer:0, type:0};
+let sensor       = {input:0, mode:0, offtimer:0, relay1:0, relay2:0, relay3:0, relay4:0, relay5:0, relay6:0, timer:0, type:0};
 let arr_relays   = {relay,relay,relay,relay,relay,relay};  // Zone information of Zone 1-6
-let sensors      = {sensor, sensor};                       // Sensor information of Sensors 1-2
+let arr_sensors  = {sensor, sensor};                       // Sensor information of Sensors 1-2
 let hc6          = {message: "", nextpoll: 0, time: 0, relays: arr_relays, sensors: arr_sensors};
 
 class Hydrawise extends utils.Adapter {
