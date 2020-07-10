@@ -8,6 +8,10 @@
 // you need to create an adapter
 const utils = require('@iobroker/adapter-core');
 
+//
+var request = require('request');
+
+
 // Load your modules here, e.g.:
 // const fs = require("fs");
 
@@ -21,7 +25,7 @@ let url_command    = "https://app.hydrawise.com/api/v1/setzone.php?";
 //
 // local copy of state variables (array)
 //
-let currentStateValues = {};
+let currentStateValues = {};  // always keep the last value of the state variables
 
 //
 // HC6 controller state definition
@@ -37,8 +41,8 @@ let time     = 0;                                      // UNIX epoche
 //
 // Prowl API definitions
 //
-let prowl_api = "";
-
+const prowl_application = this.namespace;
+const prowl_url         = "http://prowl.weks.net/publicapi/add?apikey="
 
 //
 // Hydrawise Adapter functions
@@ -92,6 +96,19 @@ class Hydrawise extends utils.Adapter {
      currentStateValues[obj] = value;
     }
 
+    //
+    // sents push message via prowl
+    //
+    sentProwlMessage(priority, message) {
+        this.log.debug(prowl_url + this.config.prowl_apikey + "&application=" + prowl_application
+        + "&priority=" + priority + "&description="+message);
+
+        request(prowl_url + this.config.prowl_apikey + "&application=" + prowl_application
+        + "&priority=" + priority + "&description="+message);
+    }
+
+
+
 
     /**
      * Is called when databases are connected and adapter received configuration.
@@ -101,34 +118,11 @@ class Hydrawise extends utils.Adapter {
 
         // The adapters config (in the instance object everything under the attribute "native") is accessible via
         // this.config:
-        hydrawise_api = this.config.hydrawise_apikey;
-        this.log.info('Hydrawise API key: ' + hydrawise_api);
-        prowl_api = this.config.prowl_apikey;
-        this.log.info('Prowl API key: ' + prowl_api);
+        //hydrawise_api = this.config.hydrawise_apikey;
+        //this.log.info('Hydrawise API key: ' + hydrawise_api);
+        //prowl_api = this.config.prowl_apikey;
+        //this.log.info('Prowl API key: ' + prowl_api);
 
-
-        /* initializes internal copy of all state variables
-      	this.getStates('*', function (err, obj) {
-      		if (err) {
-      			this.log.error('error reading states: ' + err);
-      		} else {
-      			if (obj) {
-      				for (var i in obj) {
-      					if (! obj.hasOwnProperty(i)) continue;
-      					if (obj[i] !== null) {
-      						if (typeof obj[i] == 'object') {
-      							this.setStateInternal(i, obj[i].val);
-      						} else {
-      							this.log.error('unexpected state value: ' + obj[i]);
-      						}
-      					}
-      		        }
-      			} else {
-      				this.log.error("no states found");
-      			}
-      		}
-      	});
-        */
 
        // initialize internal copy of state variables
        this.setStateInternal('custom_run', 0);
@@ -235,19 +229,31 @@ class Hydrawise extends utils.Adapter {
             // The state was changed
             // update local copy of that state variable
             this.setStateInternal(id, state.val);
-            //this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
 
-            // execute commands
+            // execute individual commands based on the actual state change
             switch (id){
+              // execute Hydrawise command if changed
               case this.namespace + '.command':
-                // evaluate command
                 switch (state.val){
-                  case "run": this.log.info("execute run");break;
-                  case "stop": this.log.info("execute stop");break;
-                  case "suspend": this.log.info("execute suspend");break;
-                  case "runall": this.log.info("execute runall");break;
-                  case "stopall": this.log.info("execute stopall");break;
-                  case "suspendall": this.log.info("execute suspendall");break;
+                  case "run":
+                    this.log.info("execute run");
+                    this.sentProwlMessage(0, "execute run")
+                    break;
+                  case "stop":
+                    this.log.info("execute stop");
+                    break;
+                  case "suspend":
+                    this.log.info("execute suspend");
+                    break;
+                  case "runall":
+                    this.log.info("execute runall");
+                    break;
+                  case "stopall":
+                    this.log.info("execute stopall");
+                    break;
+                  case "suspendall":
+                    this.log.info("execute suspendall");
+                    break;
                 }
               break;
             }
