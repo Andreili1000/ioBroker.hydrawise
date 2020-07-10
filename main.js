@@ -92,9 +92,16 @@ class Hydrawise extends utils.Adapter {
       const cmd = hydrawise_url_status + "api_key=" + this.config.hydrawise_apikey;
 
       this.log.info("send: "+cmd);
+
+      var hc6_error;
+      var hc6_response;
+      var hc6_body;
+
       request(cmd, function(error, response, body){
 
-        this.log.info("error:"+error+" response:"+response+" body:"+body);
+        hc6_error=error;
+        hc6_response=response;
+        hc6_body=body;
 
 //        var json = JSON.parse(body);
 
@@ -104,6 +111,8 @@ class Hydrawise extends utils.Adapter {
 //        hc6.message = json.message;
 //        this.log.info("time="+hc6.time+" nextpoll="+hc6.nextpoll+" message="+hc6.message);
       });
+
+      this.log.info("error="+hc6_error+" response="+hc6_response+" body="+hc6_body);
     }
 
     //
