@@ -143,7 +143,7 @@ class Hydrawise extends utils.Adapter {
        this.setStateInternal('zone',0),
 
        // initialize HC6 information from controller
-       this.getHydrawiseStatus();
+       this.readHydrawiseStatus();
 
         /*
         For every state in the system there has to be also an object of type state
