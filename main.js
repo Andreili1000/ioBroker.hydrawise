@@ -38,11 +38,6 @@ let message  = "";                                     // Status message for acc
 let nextpoll = 0;                                      // Indication of number of seconds until you should make your next request to this endpoint
 let time     = 0;                                      // UNIX epoche
 
-//
-// Prowl API definitions
-//
-const prowl_application = this.namespace;
-const prowl_url         = "http://prowl.weks.net/publicapi/add?apikey="
 
 //
 // Hydrawise Adapter functions
@@ -74,6 +69,11 @@ class Hydrawise extends utils.Adapter {
         // this.on('message', this.onMessage.bind(this));
         this.on('unload', this.onUnload.bind(this));
     }
+
+    // Prowl API definitions
+    //
+    const prowl_application = this.namespace;
+    const prowl_url         = "http://prowl.weks.net/publicapi/add?apikey="
 
     //
     // reads value out of local copy of state variable "id"
