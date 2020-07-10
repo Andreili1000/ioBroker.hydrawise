@@ -8,17 +8,8 @@
 // you need to create an adapter
 const utils = require('@iobroker/adapter-core');
 
-// Load your modules here, e.g.:
-// const fs = require("fs");
-
+// Load your modules here
 var request = require('request');
-
-var adapter = new Hydrawise();
-
-// Prowl API definitions
-//
-const prowl_application = adapter.namespace;
-const prowl_url         = "http://prowl.weks.net/publicapi/add?apikey="
 
 //
 // Hydrawise REST API definitions
@@ -101,10 +92,13 @@ class Hydrawise extends utils.Adapter {
     // sents push message via prowl
     //
     sentProwlMessage(priority, message) {
-        this.log.debug(prowl_url + this.config.prowl_apikey + "&application=" + prowl_application
+      const prowl_application = this.namespace;
+      const prowl_url         = "http://prowl.weks.net/publicapi/add?apikey="
+
+      this.log.debug(prowl_url + this.config.prowl_apikey + "&application=" + prowl_application
         + "&priority=" + priority + "&description="+message);
 
-        request(prowl_url + this.config.prowl_apikey + "&application=" + prowl_application
+      request(prowl_url + this.config.prowl_apikey + "&application=" + prowl_application
         + "&priority=" + priority + "&description="+message);
     }
 
@@ -285,15 +279,14 @@ class Hydrawise extends utils.Adapter {
 
 }
 
-
 // @ts-ignore parent is a valid property on module
-//if (module.parent) {
+if (module.parent) {
     // Export the constructor in compact mode
     /**
      * @param {Partial<utils.AdapterOptions>} [options={}]
      */
-//    module.exports = (options) => var adapter = new Hydrawise(options);
-//} else {
+    module.exports = (options) => new Hydrawise(options);
+} else {
     // otherwise start the instance directly
-//    var adapter = new Hydrawise();
-//}
+    new Hydrawise();
+}
