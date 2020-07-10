@@ -286,14 +286,15 @@ class Hydrawise extends utils.Adapter {
 
 }
 
+
 // @ts-ignore parent is a valid property on module
-if (module.parent) {
+//if (module.parent) {
     // Export the constructor in compact mode
     /**
      * @param {Partial<utils.AdapterOptions>} [options={}]
      */
-    module.exports = (options) => var adapter = new Hydrawise(options);
-} else {
+//    module.exports = (options) => var adapter = new Hydrawise(options);
+//} else {
     // otherwise start the instance directly
     var adapter = new Hydrawise();
-}
+//}
