@@ -14,9 +14,8 @@ var request = require('request');
 //
 // Hydrawise REST API definitions
 //
-let hydrawise_api  = "";
-let url_status     = "https://app.hydrawise.com/api/v1/statusschedule.php?";
-let url_command    = "https://app.hydrawise.com/api/v1/setzone.php?";
+let hydrawise_url_status     = "https://app.hydrawise.com/api/v1/statusschedule.php?";
+let hydrawise_url_command    = "https://app.hydrawise.com/api/v1/setzone.php?";
 
 //
 // local copy of state variables (array)
@@ -101,8 +100,6 @@ class Hydrawise extends utils.Adapter {
       request(prowl_url + this.config.prowl_apikey + "&application=" + prowl_application
         + "&priority=" + priority + "&description="+message);
     }
-
-
 
 
     /**
@@ -230,12 +227,22 @@ class Hydrawise extends utils.Adapter {
               // execute Hydrawise command if changed
               case this.namespace + '.command':
                 switch (state.val){
+                  //
+                  // run zone <zone> for <run> seconds
+                  //
                   case "run":
-                    this.log.info("execute run");
-                    this.sentProwlMessage(0, "execute run")
+                    this.log.info(hydrawise_url_command + "action=run&api_key=" + this.config.hydrawise_apikey
+                            + "period_id=999&relay_id=" + this.getStateInternal('zone') + ";custom="
+                            + this.getStateInternal('custom_run'));
+
+                    request(hydrawise_url_command + "action=run&api_key=" + this.config.hydrawise_apikey
+                            + "period_id=999&relay_id=" + this.getStateInternal('zone') + ";custom="
+                            + this.getStateInternal('custom_run'));
                     break;
+
                   case "stop":
                     this.log.info("execute stop");
+                    this.sentProwlMessage(0, "execute stop");
                     break;
                   case "suspend":
                     this.log.info("execute suspend");
