@@ -91,8 +91,9 @@ class Hydrawise extends utils.Adapter {
       this.log.info("send: "+cmd);
       request(cmd, function(error, response, body){
         if (!error && response.statusCode == 200) {
-          this.log.info("json = " + body);
+          //this.log.info("json = " + body);
           var obj = JSON.parse(body);
+          hc6.nextpoll = parseInt(obj.nextpoll);
         }
       });
     }
