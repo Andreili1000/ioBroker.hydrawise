@@ -286,6 +286,7 @@ class Hydrawise extends utils.Adapter {
                     break;
                   case "suspend":
                     this.log.info("execute suspend");
+                    this.log.info("hc6.nextpoll= "+hc6.nextpoll);
                     break;
                   case "runall":
                     this.log.info("execute runall");
