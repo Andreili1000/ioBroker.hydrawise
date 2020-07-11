@@ -85,6 +85,20 @@ class Hydrawise extends utils.Adapter {
         + "&priority=" + priority + "&description="+message);
     }
 
+    readHydrawiseStatus(){
+      const cmd = hydrawise_url_status + "api_key=" + this.config.hydrawise_apikey;
+
+      this.log.info("send: "+cmd);
+      request(cmd, function(error, response, body){
+        if (!error && response.statusCode == 200) {
+          this.log.info("json = " + body);
+          var obj = JSON.parse(body);
+        }
+      });
+    }
+
+
+/*
     //
     // reads Hydrawise status via REST interface asynchronously
     //
@@ -115,6 +129,7 @@ class Hydrawise extends utils.Adapter {
         }
       });
     };
+*/
 
     //
     // retrieves relay_id of Zone 1..6
