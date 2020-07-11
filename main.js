@@ -91,46 +91,42 @@ class Hydrawise extends utils.Adapter {
       this.log.info("send: "+cmd);
       request(cmd, function(error, response, body){
         if (!error && response.statusCode == 200) {
-          //this.log.info("json = " + body);
+          // parse JSON response from Hydrawise controller
           var obj = JSON.parse(body);
+          // read device config
           hc6.nextpoll = parseInt(obj.nextpoll);
+          hc6.time     = parseInt(obj.time);
+          hc6.message  = obj.message;
+          // read sensors 1-2
+          for (let i=0; i<=1; i++){
+            hc6.sensors[i].input    = parseInt(obj.sensors[i].input);
+            hc6.sensors[i].type     = parseInt(obj.sensors[i].type);
+            hc6.sensors[i].mode     = parseInt(obj.sensors[i].mode);
+            hc6.sensors[i].timer    = parseInt(obj.sensors[i].timer);
+            hc6.sensors[i].offtimer = parseInt(obj.sensors[i].offtimer);
+            hc6.sensors[i].relay1   = parseInt(obj.sensors[i].relays[0].id);
+            hc6.sensors[i].relay2   = parseInt(obj.sensors[i].relays[1].id);
+            hc6.sensors[i].relay3   = parseInt(obj.sensors[i].relays[2].id);
+            hc6.sensors[i].relay4   = parseInt(obj.sensors[i].relays[3].id);
+            hc6.sensors[i].relay5   = parseInt(obj.sensors[i].relays[4].id);
+            hc6.sensors[i].relay6   = parseInt(obj.sensors[i].relays[5].id);
+          }
+          // read relays 1-6
+          for (let i=0; i<=5; i++){
+            hc6.relays[i].relay_id  = parseInt(obj.relays[i].relay_id);
+            hc6.relays[i].name      = obj.relays[i].name;
+            hc6.relays[i].relay     = parseInt(obj.relays[i].relay);
+            hc6.relays[i].type      = parseInt(obj.relays[i].type);
+            hc6.relays[i].time      = parseInt(obj.relays[i].time);
+            hc6.relays[i].timestr   = obj.relays[i].timestr;
+            hc6.relays[i].run       = parseInt(obj.relays[i].run);
+            hc6.relays[i].period    = parseInt(obj.relays[i].period);
+          }
+
         }
       });
     }
 
-
-/*
-    //
-    // reads Hydrawise status via REST interface asynchronously
-    //
-    requestHydrawiseStatus(callback) {
-      const cmd = hydrawise_url_status + "api_key=" + this.config.hydrawise_apikey;
-
-      this.log.info("send: "+cmd);
-      request({url: cmd, json: true}, function(error, response, body){
-        if (error || response.statusCode !== 200) {
-          return callback(error || {statusCode: response.statusCode});
-        }
-        // calls callback function once response is there
-        callback(null, JSON.parse(body));
-      });
-    }
-
-    readHydrawiseStatus(){
-      // handover callback function
-      this.requestHydrawiseStatus(function(err, body) {
-        if (err) {
-          this.log.error(err);
-        } else {
-          // update system data
-          hc6.time = parseInt(body.time);
-          hc6.nextpoll = parseInt(body.nextpoll);
-          hc6.message = body.message;
-          this.log.info("time="+hc6.time+" nextpoll="+hc6.nextpoll+" message="+hc6.message);
-        }
-      });
-    };
-*/
 
     //
     // retrieves relay_id of Zone 1..6
