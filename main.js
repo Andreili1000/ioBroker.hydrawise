@@ -138,8 +138,8 @@ class Hydrawise extends utils.Adapter {
     //
     // retrieves relay_id of Zone 1..6
     //
-    relay_id(zone){
-      return relays[zone-1].id;
+    relayid(zone){
+      return hc6.relays[zone-1].relay_id;
     }
 
     /**
@@ -275,7 +275,7 @@ class Hydrawise extends utils.Adapter {
                   //
                   case "run":
                     this.log.info(hydrawise_url_command + "action=run&api_key=" + this.config.hydrawise_apikey
-                            + "&period_id=999&relay_id=" + this.getStateInternal('zone') + ";custom="
+                            + "&period_id=999&relay_id=" + relayid(this.getStateInternal('zone')) + ";custom="
                             + this.getStateInternal('custom_run'));
 
                     //request(hydrawise_url_command + "action=run&api_key=" + this.config.hydrawise_apikey
@@ -303,7 +303,6 @@ class Hydrawise extends utils.Adapter {
                   case "readstatus":
                     this.log.info("execute readstatus");
                     this.readHydrawiseStatus();
-                    this.log.info(hc6);
                     break;
                 }
               break;
