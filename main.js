@@ -302,13 +302,13 @@ class Hydrawise extends utils.Adapter {
                     break;
                   case "readstatus":
                     this.log.info("execute readstatus");
-                    this.readHydrawiseStatus();
-                    this.log.info("relay0: ", hc6.relays[0].relay_id);
-                    this.log.info("relay1: ", hc6.relays[1].relay_id);
-                    this.log.info("relay2: ", hc6.relays[2].relay_id);
-                    this.log.info("relay3: ", hc6.relays[3].relay_id);
-                    this.log.info("relay4: ", hc6.relays[4].relay_id);
-                    this.log.info("relay5: ", hc6.relays[5].relay_id);
+                    //this.readHydrawiseStatus();
+                    this.log.info("relay0: " + hc6.relays[0].relay_id);
+                    this.log.info("relay1: " + hc6.relays[1].relay_id);
+                    this.log.info("relay2: " + hc6.relays[2].relay_id);
+                    this.log.info("relay3: " + hc6.relays[3].relay_id);
+                    this.log.info("relay4: " + hc6.relays[4].relay_id);
+                    this.log.info("relay5: " + hc6.relays[5].relay_id);
                     break;
                 }
               break;
