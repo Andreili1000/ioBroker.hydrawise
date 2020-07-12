@@ -275,7 +275,7 @@ class Hydrawise extends utils.Adapter {
                   //
                   case "run":
                     this.log.info(hydrawise_url_command + "action=run&api_key=" + this.config.hydrawise_apikey
-                            + "&period_id=999&relay_id=" + relayid(this.getStateInternal('zone')) + ";custom="
+                            + "&period_id=999&relay_id=" + this.relayid(this.getStateInternal('zone')) + ";custom="
                             + this.getStateInternal('custom_run'));
 
                     //request(hydrawise_url_command + "action=run&api_key=" + this.config.hydrawise_apikey
