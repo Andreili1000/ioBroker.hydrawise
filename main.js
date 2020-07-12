@@ -102,7 +102,7 @@ class Hydrawise extends utils.Adapter {
           hc6.message  = obj.message;
           // read all configured sensors
           for (let i=0; i<=1; i++){
-            if (obj_sensors[i]!=null){
+            if (obj.sensors[i]!=null){
               hc6.sensors[i].input    = parseInt(obj.sensors[i].input);
               hc6.sensors[i].type     = parseInt(obj.sensors[i].type);
               hc6.sensors[i].mode     = parseInt(obj.sensors[i].mode);
