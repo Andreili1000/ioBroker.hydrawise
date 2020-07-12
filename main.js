@@ -300,6 +300,11 @@ class Hydrawise extends utils.Adapter {
                   case "suspendall":
                     this.log.info("execute suspendall");
                     break;
+                  case "readstatus":
+                    this.log.info("execute readstatus");
+                    this.readHydrawiseStatus();
+                    this.log.info(hc6);
+                    break;
                 }
               break;
             }
