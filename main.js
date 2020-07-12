@@ -100,30 +100,34 @@ class Hydrawise extends utils.Adapter {
           hc6.nextpoll = parseInt(obj.nextpoll);
           hc6.time     = parseInt(obj.time);
           hc6.message  = obj.message;
-          // read sensors 1-2
+          // read all configured sensors
           for (let i=0; i<=1; i++){
-            hc6.sensors[i].input    = parseInt(obj.sensors[i].input);
-            hc6.sensors[i].type     = parseInt(obj.sensors[i].type);
-            hc6.sensors[i].mode     = parseInt(obj.sensors[i].mode);
-            hc6.sensors[i].timer    = parseInt(obj.sensors[i].timer);
-            hc6.sensors[i].offtimer = parseInt(obj.sensors[i].offtimer);
-            hc6.sensors[i].relay1   = parseInt(obj.sensors[i].relays[0].id);
-            hc6.sensors[i].relay2   = parseInt(obj.sensors[i].relays[1].id);
-            hc6.sensors[i].relay3   = parseInt(obj.sensors[i].relays[2].id);
-            hc6.sensors[i].relay4   = parseInt(obj.sensors[i].relays[3].id);
-            hc6.sensors[i].relay5   = parseInt(obj.sensors[i].relays[4].id);
-            hc6.sensors[i].relay6   = parseInt(obj.sensors[i].relays[5].id);
+            if (obj_sensors[i]!=null){
+              hc6.sensors[i].input    = parseInt(obj.sensors[i].input);
+              hc6.sensors[i].type     = parseInt(obj.sensors[i].type);
+              hc6.sensors[i].mode     = parseInt(obj.sensors[i].mode);
+              hc6.sensors[i].timer    = parseInt(obj.sensors[i].timer);
+              hc6.sensors[i].offtimer = parseInt(obj.sensors[i].offtimer);
+              if (obj.sensors[i].relays[0]!=null) {hc6.sensors[i].relay1 = parseInt(obj.sensors[i].relays[0].id)};
+              if (obj.sensors[i].relays[1]!=null) {hc6.sensors[i].relay1 = parseInt(obj.sensors[i].relays[1].id)};
+              if (obj.sensors[i].relays[2]!=null) {hc6.sensors[i].relay1 = parseInt(obj.sensors[i].relays[2].id)};
+              if (obj.sensors[i].relays[3]!=null) {hc6.sensors[i].relay1 = parseInt(obj.sensors[i].relays[3].id)};
+              if (obj.sensors[i].relays[4]!=null) {hc6.sensors[i].relay1 = parseInt(obj.sensors[i].relays[4].id)};
+              if (obj.sensors[i].relays[5]!=null) {hc6.sensors[i].relay1 = parseInt(obj.sensors[i].relays[5].id)};
+            }
           }
-          // read relays 1-6
+          // read all configured relays
           for (let i=0; i<=5; i++){
-            hc6.relays[i].relay_id  = parseInt(obj.relays[i].relay_id);
-            hc6.relays[i].name      = obj.relays[i].name;
-            hc6.relays[i].relay     = parseInt(obj.relays[i].relay);
-            hc6.relays[i].type      = parseInt(obj.relays[i].type);
-            hc6.relays[i].time      = parseInt(obj.relays[i].time);
-            hc6.relays[i].timestr   = obj.relays[i].timestr;
-            hc6.relays[i].run       = parseInt(obj.relays[i].run);
-            hc6.relays[i].period    = parseInt(obj.relays[i].period);
+            if (obj.relays[i]!=null){
+              hc6.relays[i].relay_id  = parseInt(obj.relays[i].relay_id);
+              hc6.relays[i].name      = obj.relays[i].name;
+              hc6.relays[i].relay     = parseInt(obj.relays[i].relay);
+              hc6.relays[i].type      = parseInt(obj.relays[i].type);
+              hc6.relays[i].time      = parseInt(obj.relays[i].time);
+              hc6.relays[i].timestr   = obj.relays[i].timestr;
+              hc6.relays[i].run       = parseInt(obj.relays[i].run);
+              hc6.relays[i].period    = parseInt(obj.relays[i].period);
+            }
           }
 
         }
