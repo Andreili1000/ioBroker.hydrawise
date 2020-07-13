@@ -109,11 +109,11 @@ class Hydrawise extends utils.Adapter {
               hc6.sensors[i].timer    = parseInt(obj.sensors[i].timer);
               hc6.sensors[i].offtimer = parseInt(obj.sensors[i].offtimer);
               if (obj.sensors[i].relays[0]!=null) {hc6.sensors[i].relay1 = parseInt(obj.sensors[i].relays[0].id)};
-              if (obj.sensors[i].relays[1]!=null) {hc6.sensors[i].relay1 = parseInt(obj.sensors[i].relays[1].id)};
-              if (obj.sensors[i].relays[2]!=null) {hc6.sensors[i].relay1 = parseInt(obj.sensors[i].relays[2].id)};
-              if (obj.sensors[i].relays[3]!=null) {hc6.sensors[i].relay1 = parseInt(obj.sensors[i].relays[3].id)};
-              if (obj.sensors[i].relays[4]!=null) {hc6.sensors[i].relay1 = parseInt(obj.sensors[i].relays[4].id)};
-              if (obj.sensors[i].relays[5]!=null) {hc6.sensors[i].relay1 = parseInt(obj.sensors[i].relays[5].id)};
+              if (obj.sensors[i].relays[1]!=null) {hc6.sensors[i].relay2 = parseInt(obj.sensors[i].relays[1].id)};
+              if (obj.sensors[i].relays[2]!=null) {hc6.sensors[i].relay3 = parseInt(obj.sensors[i].relays[2].id)};
+              if (obj.sensors[i].relays[3]!=null) {hc6.sensors[i].relay4 = parseInt(obj.sensors[i].relays[3].id)};
+              if (obj.sensors[i].relays[4]!=null) {hc6.sensors[i].relay5 = parseInt(obj.sensors[i].relays[4].id)};
+              if (obj.sensors[i].relays[5]!=null) {hc6.sensors[i].relay6 = parseInt(obj.sensors[i].relays[5].id)};
             }
           }
           // read all configured relays
@@ -303,12 +303,12 @@ class Hydrawise extends utils.Adapter {
                   case "readstatus":
                     this.log.info("execute readstatus");
                     //this.readHydrawiseStatus();
-                    this.log.info("relay0: " + hc6.relays[0].relay_id);
-                    this.log.info("relay1: " + hc6.relays[1].relay_id);
-                    this.log.info("relay2: " + hc6.relays[2].relay_id);
-                    this.log.info("relay3: " + hc6.relays[3].relay_id);
-                    this.log.info("relay4: " + hc6.relays[4].relay_id);
-                    this.log.info("relay5: " + hc6.relays[5].relay_id);
+                    this.log.info("relay0: " + hc6.relays[0].relay_id + "name: " + hc6.relays[0].name );
+                    this.log.info("relay1: " + hc6.relays[1].relay_id + "name: " + hc6.relays[1].name);
+                    this.log.info("relay2: " + hc6.relays[2].relay_id + "name: " + hc6.relays[2].name);
+                    this.log.info("relay3: " + hc6.relays[3].relay_id + "name: " + hc6.relays[3].name);
+                    this.log.info("relay4: " + hc6.relays[4].relay_id + "name: " + hc6.relays[4].name);
+                    this.log.info("relay5: " + hc6.relays[5].relay_id + "name: " + hc6.relays[5].name);
                     break;
                 }
               break;
