@@ -170,8 +170,9 @@ class Hydrawise extends utils.Adapter {
     // retrieves relay_id of Zone 1..6
     //
     relayid(zone){
-      this.log.info("zone="+zone+" relay_id="+this.hc6.relays[zone-1].relay_id);
-      return this.hc6.relays[zone-1].relay_id;
+      let array_id = zone-1;
+      this.log.info("zone="+zone+" relay_id="+this.hc6.relays[array_id].relay_id);
+      return this.hc6.relays[array_id].relay_id;
     }
 
     /**
