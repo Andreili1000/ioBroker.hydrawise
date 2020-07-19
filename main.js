@@ -118,7 +118,7 @@ class Hydrawise extends utils.Adapter {
           this.hc6.nextpoll = parseInt(obj.nextpoll);
           this.hc6.time     = parseInt(obj.time);
           this.hc6.message  = obj.message;
-          this.log.info("nextpoll="+this.hc6.nextpoll+" time="+this.hc6.time+" message="+this.this.hc6.message)
+          this.log.info("nextpoll="+this.hc6.nextpoll+" time="+this.hc6.time+" message="+this.hc6.message)
           
           // read all configured sensors
           for (let i=0; i<=1; i++){
