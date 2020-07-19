@@ -154,6 +154,7 @@ class Hydrawise extends utils.Adapter {
     // retrieves relay_id of Zone 1..6
     //
     relayid(zone){
+      this.log.info("zone="+zone+" relay_id="+hc6.relays[zone-1].relay_id);
       return hc6.relays[zone-1].relay_id;
     }
 
@@ -304,7 +305,6 @@ class Hydrawise extends utils.Adapter {
                     break;
                   case "suspend":
                     this.log.info("execute suspend");
-                    this.log.info("hc6.nextpoll= "+hc6.nextpoll);
                     break;
                   case "runall":
                     this.log.info("execute runall");
@@ -317,13 +317,7 @@ class Hydrawise extends utils.Adapter {
                     break;
                   case "readstatus":
                     this.log.info("execute readstatus");
-                    //this.readHydrawiseStatus();
-                    this.log.info("relay0: " + hc6.relays[0].relay_id + "name: " + hc6.relays[0].name );
-                    this.log.info("relay1: " + hc6.relays[1].relay_id + "name: " + hc6.relays[1].name);
-                    this.log.info("relay2: " + hc6.relays[2].relay_id + "name: " + hc6.relays[2].name);
-                    this.log.info("relay3: " + hc6.relays[3].relay_id + "name: " + hc6.relays[3].name);
-                    this.log.info("relay4: " + hc6.relays[4].relay_id + "name: " + hc6.relays[4].name);
-                    this.log.info("relay5: " + hc6.relays[5].relay_id + "name: " + hc6.relays[5].name);
+                    this.readHydrawiseStatus();
                     break;
                 }
               break;
