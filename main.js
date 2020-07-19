@@ -101,12 +101,7 @@ class Hydrawise extends utils.Adapter {
           // read device config
           hc6.nextpoll = parseInt(obj.nextpoll);
           hc6.time     = parseInt(obj.time);
-          if (obj.message!=undefined){
-            hc6.message  = obj.message;
-          }
-          else{
-            hc6.message  = " ";
-          }
+          hc6.message  = obj.message;
           this.log.info("nextpoll="+hc6.nextpoll+" time="+hc6.time+" message="+hc6.message)
           
           // read all configured sensors
@@ -134,18 +129,22 @@ class Hydrawise extends utils.Adapter {
               hc6.relays[i].time      = parseInt(obj.relays[i].time);
               hc6.relays[i].run       = parseInt(obj.relays[i].run);
               hc6.relays[i].period    = parseInt(obj.relays[i].period);
-              if (obj.relays[i].timestr!=undefined){
-                hc6.relays[i].timestr   = obj.relays[i].timestr;
-              }
-              else{
-                hc6.relays[i].timestr = " ";
-              }
-              this.log.info("relay"+i+": relay_id="+hc6.relays[i].relay_id+" name="+hc6.relays[i].name+
-              " relay="+hc6.relays[i].relay+" type="+hc6.relays[i].type+" time="+hc6.relays[i].time+
-              " run="+hc6.relays[i].run+" period="+hc6.relays[i].period+" timestr="+hc6.relays[i].timestr);
+              hc6.relays[i].timestr   = obj.relays[i].timestr;
             }
+            else{
+              hc6.relays[i].relay_id  = 0;
+              hc6.relays[i].name      = "";
+              hc6.relays[i].relay     = 0;
+              hc6.relays[i].type      = 0;
+              hc6.relays[i].time      = 0;
+              hc6.relays[i].run       = 0;
+              hc6.relays[i].period    = 0;
+              hc6.relays[i].timestr   = "";
+            }
+            this.log.info("relay"+i+": relay_id="+hc6.relays[i].relay_id+" name="+hc6.relays[i].name+
+            " relay="+hc6.relays[i].relay+" type="+hc6.relays[i].type+" time="+hc6.relays[i].time+
+            " run="+hc6.relays[i].run+" period="+hc6.relays[i].period+" timestr="+hc6.relays[i].timestr);
           }
-
         }
       });
     }
