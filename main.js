@@ -101,7 +101,7 @@ class Hydrawise extends utils.Adapter {
 
       this.log.info("send: "+cmd);
       //request(cmd, function(error, response, body){
-      request(cmd, (error, response, body) => {
+      request(cmd, function (error, response, body) {
         if (!error && response.statusCode == 200) {
           // parse JSON response from Hydrawise controller
           var obj = JSON.parse(body);
@@ -299,7 +299,7 @@ class Hydrawise extends utils.Adapter {
                   //
                   case "run":
                     this.log.info("relay0-relay_id="+this.hc6.relays[0].relay_id);
-                    
+
                     this.log.info(this.hydrawise_url_command + "action=run&api_key=" + this.config.hydrawise_apikey
                             + "&period_id=999&relay_id=" + this.relayid(this.getStateInternal('zone')) + ";custom="
                             + this.getStateInternal('custom_run'));
