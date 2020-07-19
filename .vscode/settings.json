@@ -1,0 +1,8 @@
+{
+    "debug.allowBreakpointsEverywhere": true,
+    "launch": {
+    
+        "configurations": [],
+        "compounds": []
+    }
+}

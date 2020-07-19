@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use strict';
 
 /*
@@ -92,7 +93,8 @@ class Hydrawise extends utils.Adapter {
       const cmd = hydrawise_url_status + "api_key=" + this.config.hydrawise_apikey;
 
       this.log.info("send: "+cmd);
-      request(cmd, function(error, response, body){
+      //request(cmd, function(error, response, body){
+      request(cmd, (error, response, body) => {
         if (!error && response.statusCode == 200) {
           // parse JSON response from Hydrawise controller
           var obj = JSON.parse(body);
@@ -100,6 +102,7 @@ class Hydrawise extends utils.Adapter {
           hc6.nextpoll = parseInt(obj.nextpoll);
           hc6.time     = parseInt(obj.time);
           hc6.message  = obj.message;
+          this.log.info("nextpoll="+hc6.nextpoll+" time="+hc6.time+" message=".hc6.message)
           // read all configured sensors
           for (let i=0; i<=1; i++){
             if (obj.sensors[i]!=null){
