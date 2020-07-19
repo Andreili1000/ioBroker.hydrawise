@@ -106,7 +106,7 @@ class Hydrawise extends utils.Adapter {
     }
 
     readHydrawiseStatus(){
-      const cmd = hydrawise_url_status + "api_key=" + this.config.hydrawise_apikey;
+      const cmd = this.hydrawise_url_status + "api_key=" + this.config.hydrawise_apikey;
 
       this.log.info("send: "+cmd);
       //request(cmd, function(error, response, body){
