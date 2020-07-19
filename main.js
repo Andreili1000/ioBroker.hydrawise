@@ -16,7 +16,7 @@ var request = require('request');
 // Hydrawise REST API definitions
 //
 let hydrawise_url_status     = "https://app.hydrawise.com/api/v1/statusschedule.php?";
-let hydrawise_url_command    = "https://app.hydrawise.com/api/v1/setzone.php?";
+// let hydrawise_url_command    = "https://app.hydrawise.com/api/v1/setzone.php?";
 
 //
 // local copy of state variables (array)
@@ -51,6 +51,11 @@ class Hydrawise extends utils.Adapter {
         // this.on('objectChange', this.onObjectChange.bind(this));
         // this.on('message', this.onMessage.bind(this));
         this.on('unload', this.onUnload.bind(this));
+
+        // declare properties of class
+        this.hydrawise_url_command    = "https://app.hydrawise.com/api/v1/setzone.php?";
+
+
     }
 
 
@@ -290,11 +295,11 @@ class Hydrawise extends utils.Adapter {
                   // run zone <zone> for <run> seconds
                   //
                   case "run":
-                    this.log.info(hydrawise_url_command + "action=run&api_key=" + this.config.hydrawise_apikey
+                    this.log.info(this.hydrawise_url_command + "action=run&api_key=" + this.config.hydrawise_apikey
                             + "&period_id=999&relay_id=" + this.relayid(this.getStateInternal('zone')) + ";custom="
                             + this.getStateInternal('custom_run'));
 
-                    //request(hydrawise_url_command + "action=run&api_key=" + this.config.hydrawise_apikey
+                    //request(this.hydrawise_url_command + "action=run&api_key=" + this.config.hydrawise_apikey
                     //        + "&period_id=999&relay_id=" + this.getStateInternal('zone') + ";custom="
                     //        + this.getStateInternal('custom_run'));
                     break;
