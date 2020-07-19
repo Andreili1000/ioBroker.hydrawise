@@ -107,7 +107,7 @@ class Hydrawise extends utils.Adapter {
           else{
             hc6.message  = " ";
           }
-          this.log.info("nextpoll="+hc6.nextpoll+" time="+hc6.time+" message=".hc6.message)
+          this.log.info("nextpoll="+hc6.nextpoll+" time="+hc6.time+" message="+hc6.message)
           
           // read all configured sensors
           for (let i=0; i<=1; i++){
