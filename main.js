@@ -15,7 +15,9 @@ var request = require('request');
 //
 // local copy of state variables (array)
 //
-let currentStateValues = {};  // always keep the last value of the state variables
+var currentStateValues = {};  // always keep the last value of the state variables
+
+var testVar = 1;
 
 
 class Hydrawise extends utils.Adapter {
@@ -100,7 +102,7 @@ class Hydrawise extends utils.Adapter {
       const cmd = this.hydrawise_url_status + "api_key=" + this.config.hydrawise_apikey;
 
       this.log.info("send: "+cmd);
-      //request(cmd, function(error, response, body){
+      //request(cmd, => (error, response, body){
       request(cmd, function (error, response, body) {
         if (!error && response.statusCode == 200) {
           // parse JSON response from Hydrawise controller
@@ -109,7 +111,10 @@ class Hydrawise extends utils.Adapter {
           this.hc6.nextpoll = parseInt(obj.nextpoll);
           this.hc6.time     = parseInt(obj.time);
           this.hc6.message  = obj.message;
-          this.log.info("nextpoll="+this.hc6.nextpoll+" time="+this.hc6.time+" message="+this.hc6.message)
+          this.log.info("nextpoll="+this.hc6.nextpoll+" time="+this.hc6.time+" message="+this.hc6.message);
+
+          testVar = 5;
+          this.log.info("testVar (inside)="+testVar);
           
           // read all configured sensors
           for (let i=0; i<=1; i++){
@@ -163,6 +168,7 @@ class Hydrawise extends utils.Adapter {
     relayid(zone){
       let array_id = zone-1;
       this.log.info("zone="+zone+" array_id="+array_id+" relay_id="+this.hc6.relays[0].relay_id);
+      this.log.info("testVar (outside)="+testVar);
       return this.hc6.relays[array_id].relay_id;
     }
 
@@ -185,6 +191,7 @@ class Hydrawise extends utils.Adapter {
        this.setStateInternal('custom_suspend', 0);
        this.setStateInternal('zone',0),
 
+       this.log.info("testVar (init)="+testVar);
        // initialize hc6 information from controller
        this.readHydrawiseStatus();
 
