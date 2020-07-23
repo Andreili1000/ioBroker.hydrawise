@@ -175,6 +175,13 @@ class Hydrawise extends utils.Adapter {
       this.log.info("zone="+zone+" array_id="+array_id+" relay_id="+hc6.relays[0].relay_id);
       this.log.info("testVar (outside)="+testVar);
       this.log.info("nextpoll="+hc6.nextpoll);
+
+      for (let i=0; i<=5; i++){
+        this.log.info("relay"+i+": relay_id="+hc6.relays[i].relay_id+" name="+hc6.relays[i].name+
+        " relay="+hc6.relays[i].relay+" type="+hc6.relays[i].type+" time="+hc6.relays[i].time+
+        " run="+hc6.relays[i].run+" period="+hc6.relays[i].period+" timestr="+hc6.relays[i].timestr);
+      }
+
       return hc6.relays[array_id].relay_id;
     }
 
