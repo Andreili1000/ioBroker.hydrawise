@@ -103,7 +103,7 @@ class Hydrawise extends utils.Adapter {
 
       this.log.info("send: "+cmd);
       //request(cmd, => (error, response, body){
-      request(cmd, function (error, response, body) {
+      request(cmd, => (error, response, body) {
         if (!error && response.statusCode == 200) {
           // parse JSON response from Hydrawise controller
           var obj = JSON.parse(body);
