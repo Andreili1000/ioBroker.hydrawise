@@ -108,15 +108,16 @@ class Hydrawise extends utils.Adapter {
 
       this.log.info("send: "+cmd);
       //request(cmd, function (error, response, body){
-      request(cmd, (error, response, body) => {
+      hc6=request(cmd, (error, response, body) => {
         if (!error && response.statusCode == 200) {
           // parse JSON response from Hydrawise controller
           var obj = JSON.parse(body);
+          var hc7;
           // read device config
-          hc6.nextpoll = parseInt(obj.nextpoll);
-          hc6.time     = parseInt(obj.time);
-          hc6.message  = obj.message;
-          this.log.info("nextpoll="+hc6.nextpoll+" time="+hc6.time+" message="+hc6.message);
+          hc7.nextpoll = parseInt(obj.nextpoll);
+          hc7.time     = parseInt(obj.time);
+          hc7.message  = obj.message;
+          this.log.info("nextpoll="+hc7.nextpoll+" time="+hc7.time+" message="+hc7.message);
 
           testVar = 5;
           this.log.info("testVar (inside)="+testVar);
@@ -124,43 +125,44 @@ class Hydrawise extends utils.Adapter {
           // read all configured sensors
           for (let i=0; i<=1; i++){
             if (obj.sensors[i]!=null){
-              hc6.sensors[i].input    = parseInt(obj.sensors[i].input);
-              hc6.sensors[i].type     = parseInt(obj.sensors[i].type);
-              hc6.sensors[i].mode     = parseInt(obj.sensors[i].mode);
-              hc6.sensors[i].timer    = parseInt(obj.sensors[i].timer);
-              hc6.sensors[i].offtimer = parseInt(obj.sensors[i].offtimer);
+              hc7.sensors[i].input    = parseInt(obj.sensors[i].input);
+              hc7.sensors[i].type     = parseInt(obj.sensors[i].type);
+              hc7.sensors[i].mode     = parseInt(obj.sensors[i].mode);
+              hc7.sensors[i].timer    = parseInt(obj.sensors[i].timer);
+              hc7.sensors[i].offtimer = parseInt(obj.sensors[i].offtimer);
               for (let j=0; j<=5; j++){
-                hc6.sensors[i].relays[j]=0;
-                if (obj.sensors[i].relays[j]!=null) {hc6.sensors[i].relays[j] = parseInt(obj.sensors[i].relays[j].id)};
-                this.log.info("sensor"+i+": relay"+j+": id="+hc6.sensors[i].relays[j]);
+                hc7.sensors[i].relays[j]=0;
+                if (obj.sensors[i].relays[j]!=null) {hc7.sensors[i].relays[j] = parseInt(obj.sensors[i].relays[j].id)};
+                this.log.info("sensor"+i+": relay"+j+": id="+hc7.sensors[i].relays[j]);
               }
             }
           }
           // read all configured relays
           for (let i=0; i<=5; i++){
             if (obj.relays[i]!=null){
-              hc6.relays[i].relay_id  = parseInt(obj.relays[i].relay_id);
-              hc6.relays[i].name      = obj.relays[i].name;
-              hc6.relays[i].relay     = parseInt(obj.relays[i].relay);
-              hc6.relays[i].type      = parseInt(obj.relays[i].type);
-              hc6.relays[i].time      = parseInt(obj.relays[i].time);
-              hc6.relays[i].run       = parseInt(obj.relays[i].run);
-              hc6.relays[i].period    = parseInt(obj.relays[i].period);
-              hc6.relays[i].timestr   = obj.relays[i].timestr;
+              hc7.relays[i].relay_id  = parseInt(obj.relays[i].relay_id);
+              hc7.relays[i].name      = obj.relays[i].name;
+              hc7.relays[i].relay     = parseInt(obj.relays[i].relay);
+              hc7.relays[i].type      = parseInt(obj.relays[i].type);
+              hc7.relays[i].time      = parseInt(obj.relays[i].time);
+              hc7.relays[i].run       = parseInt(obj.relays[i].run);
+              hc7.relays[i].period    = parseInt(obj.relays[i].period);
+              hc7.relays[i].timestr   = obj.relays[i].timestr;
             }
             else{
-              hc6.relays[i].relay_id  = 0;
-              hc6.relays[i].name      = "";
-              hc6.relays[i].relay     = 0;
-              hc6.relays[i].type      = 0;
-              hc6.relays[i].time      = 0;
-              hc6.relays[i].run       = 0;
-              hc6.relays[i].period    = 0;
-              hc6.relays[i].timestr   = "";
+              hc7.relays[i].relay_id  = 0;
+              hc7.relays[i].name      = "";
+              hc7.relays[i].relay     = 0;
+              hc7.relays[i].type      = 0;
+              hc7.relays[i].time      = 0;
+              hc7.relays[i].run       = 0;
+              hc7.relays[i].period    = 0;
+              hc7.relays[i].timestr   = "";
             }
-            this.log.info("relay"+i+": relay_id="+hc6.relays[i].relay_id+" name="+hc6.relays[i].name+
-            " relay="+hc6.relays[i].relay+" type="+hc6.relays[i].type+" time="+hc6.relays[i].time+
-            " run="+hc6.relays[i].run+" period="+hc6.relays[i].period+" timestr="+hc6.relays[i].timestr);
+            this.log.info("relay"+i+": relay_id="+hc7.relays[i].relay_id+" name="+hc7.relays[i].name+
+            " relay="+hc7.relays[i].relay+" type="+hc7.relays[i].type+" time="+hc7.relays[i].time+
+            " run="+hc7.relays[i].run+" period="+hc7.relays[i].period+" timestr="+hc7.relays[i].timestr);
+            return hc7;
           }
         }
       });
