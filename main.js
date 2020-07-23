@@ -174,6 +174,7 @@ class Hydrawise extends utils.Adapter {
       let array_id = zone-1;
       this.log.info("zone="+zone+" array_id="+array_id+" relay_id="+hc6.relays[0].relay_id);
       this.log.info("testVar (outside)="+testVar);
+      this.log.info("nextpoll="+hc6.nextpoll);
       return hc6.relays[array_id].relay_id;
     }
 
