@@ -17,8 +17,9 @@ var request = require('request');
 //
 var currentStateValues = {};  // always keep the last value of the state variables
 
-var testVar = ["Hello", "World"];
-
+var testVar = {type: "Test",
+               words:  ["Hello", "World"]
+              };
 
 //
 // Hydrawise REST API definitions
@@ -118,8 +119,8 @@ class Hydrawise extends utils.Adapter {
           hc6.message  = obj.message;
           this.log.info("nextpoll="+hc6.nextpoll+" time="+hc6.time+" message="+hc6.message);
 
-          testVar[1]="Adapter";
-          this.log.info("testVar (inside)="+testVar[1]);
+          testVar.words[1]="Adapter";
+          this.log.info("testVar (inside)="+testVar.words[1]);
           
           // read all configured sensors
           for (let i=0; i<=1; i++){
@@ -173,7 +174,7 @@ class Hydrawise extends utils.Adapter {
     relayid(zone){
       let array_id = zone-1;
       this.log.info("zone="+zone+" array_id="+array_id+" relay_id="+hc6.relays[0].relay_id);
-      this.log.info("testVar (outside)="+testVar[1]);
+      this.log.info("testVar (outside)="+testVar.words[1]);
       this.log.info("nextpoll="+hc6.nextpoll);
 
       for (let i=0; i<=5; i++){
@@ -204,7 +205,7 @@ class Hydrawise extends utils.Adapter {
        this.setStateInternal('custom_suspend', 0);
        this.setStateInternal('zone',0),
 
-       this.log.info("testVar (init)="+testVar[1]);
+       this.log.info("testVar (init)="+testVar.words[1]);
        // initialize hc6 information from controller
        this.readHydrawiseStatus();
 
