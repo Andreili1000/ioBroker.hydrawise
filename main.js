@@ -157,8 +157,8 @@ class Hydrawise extends utils.Adapter {
             }
             this.log.info("sensor"+i+": input="+hc6.sensors[i].input+" type="+hc6.sensors[i].type+
             " mode="+hc6.sensors[i].mode+ " timer="+hc6.sensors[i].timer+" offtimer="+hc6.sensors[i].offtimer+
-            " relay0="+hc6.sensors[i].relays[0].id+" relay1="+hc6.sensors[i].relays[1].id+" relay2="+hc6.sensors[i].relays[2].id+
-            " relay3="+hc6.sensors[i].relays[3].id+" relay4="+hc6.sensors[i].relays[4].id+" relay5="+hc6.sensors[i].relays[5].id);
+            " relay0="+hc6.sensors[i].relays[0]+" relay1="+hc6.sensors[i].relays[1]+" relay2="+hc6.sensors[i].relays[2]+
+            " relay3="+hc6.sensors[i].relays[3]+" relay4="+hc6.sensors[i].relays[4]+" relay5="+hc6.sensors[i].relays[5]);
           }
 
           // read all configured relays
