@@ -13,13 +13,18 @@ const utils = require('@iobroker/adapter-core');
 var request = require('request');
 
 //
+// define global variables here
+//
+
+//
 // local copy of state variables (array)
 //
 var currentStateValues = {};  // always keep the last value of the state variables
 
-var testVar = {type: "Test",
-               words:  ["Hello", "World"]
-              };
+//
+// Prowl Interface Definition
+//
+prowl_url    = "http://prowl.weks.net/publicapi/add?apikey=";
 
 //
 // Hydrawise REST API definitions
@@ -27,18 +32,9 @@ var testVar = {type: "Test",
 var hydrawise_url_command    = "https://app.hydrawise.com/api/v1/setzone.php?";
 var hydrawise_url_status     = "https://app.hydrawise.com/api/v1/statusschedule.php?";
 
-
 //
 // hc6 controller state definition
 //
-//var relay        = {name:"", period:0, relay:0, relay_id:0, run:0, time:0, timestr:"", type:0};
-//var sensor       = {input:0, mode:0, offtimer:0, timer:0, type:0, relays:[0,0,0,0,0,0]};
-//var hc6          = {message: "",
-//                    nextpoll: 0,
-//                    time: 0,
-//                    relays: [relay,relay,relay,relay,relay,relay],
-//                    sensors: [sensor,sensor]
-//                  };
 
 var hc6          = {message: "", 
                     nextpoll: 0, 
@@ -76,14 +72,7 @@ class Hydrawise extends utils.Adapter {
         // declare all additional properties of class
         //
 
-        
 
-        
-
-        //
-        // Prowl Interface Definition
-        //
-        this.prowl_url    = "http://prowl.weks.net/publicapi/add?apikey=";
     }
 
     //
@@ -112,10 +101,10 @@ class Hydrawise extends utils.Adapter {
     //
     sentProwlMessage(priority, message) {
 
-      this.log.debug(this.prowl_url + this.config.prowl_apikey + "&application=" + this.namespace
+      this.log.debug(prowl_url + this.config.prowl_apikey + "&application=" + this.namespace
         + "&priority=" + priority + "&description="+message);
 
-      request(this.prowl_url + this.config.prowl_apikey + "&application=" + this.namespace
+      request(prowl_url + this.config.prowl_apikey + "&application=" + this.namespace
         + "&priority=" + priority + "&description="+message);
     }
 
@@ -134,9 +123,6 @@ class Hydrawise extends utils.Adapter {
           hc6.time     = parseInt(obj.time);
           hc6.message  = obj.message;
           this.log.info("nextpoll="+hc6.nextpoll+" time="+hc6.time+" message="+hc6.message);
-
-          testVar.words[1]="Adapter";
-          this.log.info("testVar (inside)="+testVar.words[1]);
  
           // read all configured sensors
           for (let i=0; i<=1; i++){
@@ -191,24 +177,24 @@ class Hydrawise extends utils.Adapter {
       });
     }
 
-
     //
     // retrieves relay_id of Zone 1..6
     //
     relayid(zone){
-      let array_id = zone-1;
-      this.log.info("zone="+zone+" array_id="+array_id+" relay_id="+hc6.relays[0].relay_id);
-      this.log.info("testVar (outside)="+testVar.words[1]);
-      this.log.info("nextpoll="+hc6.nextpoll);
-
-      for (let i=0; i<=5; i++){
-        this.log.info("relay"+i+": relay_id="+hc6.relays[i].relay_id+" name="+hc6.relays[i].name+
-        " relay="+hc6.relays[i].relay+" type="+hc6.relays[i].type+" time="+hc6.relays[i].time+
-        " run="+hc6.relays[i].run+" period="+hc6.relays[i].period+" timestr="+hc6.relays[i].timestr);
-      }
-
-      return hc6.relays[array_id].relay_id;
+      return hc6.relays[zone-1].relay_id;
     }
+
+    //
+    // retrieves name of Zone 1..6
+    //
+    zonename(zone){
+      let relay_id = relayid(zone);
+      for (let i=0; i<=5; i++){
+        if (hc6.relays[i].relay_id==relay_id){return hc6.relays[i].name}
+      };
+      return "unknown"
+    }
+
 
     /**
      * Is called when databases are connected and adapter received configuration.
@@ -229,7 +215,6 @@ class Hydrawise extends utils.Adapter {
        this.setStateInternal('custom_suspend', 0);
        this.setStateInternal('zone',0),
 
-       this.log.info("testVar (init)="+testVar.words[1]);
        // initialize hc information from controller
        this.readHydrawiseStatus();
 
@@ -343,15 +328,13 @@ class Hydrawise extends utils.Adapter {
                   // run zone <zone> for <run> seconds
                   //
                   case "run":
-                    this.log.info("relay0-relay_id="+hc6.relays[0].relay_id);
-
+                    request(hydrawise_url_command + "action=run&api_key=" + this.config.hydrawise_apikey
+                            + "&period_id=999&relay_id=" + this.relayid(this.getStateInternal('zone')) + ";custom="
+                            + this.getStateInternal('custom_run'));
                     this.log.info(hydrawise_url_command + "action=run&api_key=" + this.config.hydrawise_apikey
                             + "&period_id=999&relay_id=" + this.relayid(this.getStateInternal('zone')) + ";custom="
                             + this.getStateInternal('custom_run'));
-
-                    //request(hydrawise_url_command + "action=run&api_key=" + this.config.hydrawise_apikey
-                    //        + "&period_id=999&relay_id=" + this.getStateInternal('zone') + ";custom="
-                    //        + this.getStateInternal('custom_run'));
+                    this.sentProwlMessage(0, "run zone "+this.zonename(zone)+" for "+this.getStateInternal('custom_run')+" s");        
                     break;
 
                   case "stop":
