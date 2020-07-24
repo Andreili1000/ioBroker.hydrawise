@@ -137,7 +137,7 @@ class Hydrawise extends utils.Adapter {
 
           testVar.words[1]="Adapter";
           this.log.info("testVar (inside)="+testVar.words[1]);
-          
+ 
           // read all configured sensors
           for (let i=0; i<=1; i++){
             // if sensor is configured
@@ -151,7 +151,7 @@ class Hydrawise extends utils.Adapter {
               for (let j=0; j<=5; j++){
                 // if relay is configured
                 if (obj.sensors[i].relays[j]!=null){
-                  hc6.sensors[i].relays[j].id=obj.sensors[i].relays[j].id
+                  hc6.sensors[i].relays[j]=obj.sensors[i].relays[j].id
                 }
               };
             }
