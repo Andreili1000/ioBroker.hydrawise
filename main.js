@@ -24,7 +24,7 @@ var currentStateValues = {};  // always keep the last value of the state variabl
 //
 // Prowl Interface Definition
 //
-prowl_url    = "http://prowl.weks.net/publicapi/add?apikey=";
+var prowl_url    = "http://prowl.weks.net/publicapi/add?apikey=";
 
 //
 // Hydrawise REST API definitions
