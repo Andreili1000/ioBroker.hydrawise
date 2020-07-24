@@ -17,11 +17,8 @@ var request = require('request');
 //
 var currentStateValues = {};  // always keep the last value of the state variables
 
-var testobj = {id:10;}
-
 var testVar = {type: "Test",
-               words:  ["Hello", "World"],
-               obj: [testobj, testobj]
+               words:  ["Hello", "World"]
               };
 
 //
@@ -120,7 +117,7 @@ class Hydrawise extends utils.Adapter {
       request(cmd, (error, response, body) => {
 
 
-        /var relay        = {name:"", period:0, relay:0, relay_id:0, run:0, time:0, timestr:"", type:0};
+        //var relay        = {name:"", period:0, relay:0, relay_id:0, run:0, time:0, timestr:"", type:0};
         //var sensor       = {input:0, mode:0, offtimer:0, timer:0, type:0, relays:[0,0,0,0,0,0]};
         //var hc6          = {message: "",
         //                    nextpoll: 0,
@@ -144,26 +141,24 @@ class Hydrawise extends utils.Adapter {
           
           // read all configured sensors
           for (let i=0; i<=1; i++){
+            // if sensor is configured
             if (obj.sensors[i]!=null){
-              var sensor = {input:    parseInt(obj.sensors[i].input,
-                            type:     parseInt(obj.sensors[i].type,
-                            mode:     parseInt(obj.sensors[i].mode,         
-                            timer:    parseInt(obj.sensors[i].timer,
-                            offtimer: parseInt(obj.sensors[i].offtimer 
-              }
-
-
-             // hc6.sensors[i].input    = parseInt(obj.sensors[i].input);
-             // hc6.sensors[i].type     = parseInt(obj.sensors[i].type);
-             // hc6.sensors[i].mode     = parseInt(obj.sensors[i].mode);
-             // hc6.sensors[i].timer    = parseInt(obj.sensors[i].timer);
-             // hc6.sensors[i].offtimer = parseInt(obj.sensors[i].offtimer);
-              
-             for (let j=0; j<=5; j++){
-                hc6.sensors[i].relays[j]=0;
-                if (obj.sensors[i].relays[j]!=null) {hc6.sensors[i].relays[j] = parseInt(obj.sensors[i].relays[j].id)};
-                this.log.info("sensor"+i+": relay"+j+": id="+hc6.sensors[i].relays[j]);
-              }
+              // read all related relays
+              let relays = [];
+              for (let j=0; j<=5; j++){
+                // if relay is configured
+                if (obj.sensors[i].relays[j]!=null){relays.push(parseInt(obj.sensors[i].relays[j].id))}
+                // otherwise use relay_id 0
+                else{relays.push(0)}
+              };
+              let sensor = {input:    parseInt(obj.sensors[i].input),
+                            type:     parseInt(obj.sensors[i].type),
+                            mode:     parseInt(obj.sensors[i].mode),         
+                            timer:    parseInt(obj.sensors[i].timer),
+                            offtimer: parseInt(obj.sensors[i].offtimer),
+                            relays:   relays
+                           }
+              hc6.sensors.push(sensor);             
             }
           }
 
