@@ -334,13 +334,17 @@ class Hydrawise extends utils.Adapter {
                     this.log.info(hydrawise_url_command + "action=run&api_key=" + this.config.hydrawise_apikey
                             + "&period_id=999&relay_id=" + this.relayid(this.getStateInternal('zone')) + ";custom="
                             + this.getStateInternal('custom_run'));
-                    this.sentProwlMessage(0, "run zone "+this.zonename(zone)+" for "+this.getStateInternal('custom_run')+" s");        
+                    this.sentProwlMessage(0, "run zone "+this.zonename(this.getStateInternal('zone'))+" for "+this.getStateInternal('custom_run')+" s");        
                     break;
 
                   case "stop":
-                    this.log.info("execute stop");
-                    this.sentProwlMessage(0, "execute stop");
+                    request(hydrawise_url_command + "action=stop&api_key=" + this.config.hydrawise_apikey
+                            + "&period_id=999&relay_id=" + this.relayid(this.getStateInternal('zone')));
+                    this.log.info(hydrawise_url_command + "action=stop&api_key=" + this.config.hydrawise_apikey
+                            + "&period_id=999&relay_id=" + this.relayid(this.getStateInternal('zone')));
+                    this.sentProwlMessage(0, "stop zone "+this.zonename(this.getStateInternal('zone')));   
                     break;
+                    
                   case "suspend":
                     this.log.info("execute suspend");
                     break;
