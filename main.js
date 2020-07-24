@@ -188,7 +188,7 @@ class Hydrawise extends utils.Adapter {
     // retrieves name of Zone 1..6
     //
     zonename(zone){
-      let relay_id = relayid(zone);
+      let relay_id = this.relayid(zone);
       for (let i=0; i<=5; i++){
         if (hc6.relays[i].relay_id==relay_id){return hc6.relays[i].name}
       };
@@ -329,10 +329,10 @@ class Hydrawise extends utils.Adapter {
                   //
                   case "run":
                     request(hydrawise_url_command + "action=run&api_key=" + this.config.hydrawise_apikey
-                            + "&period_id=999&relay_id=" + this.relayid(this.getStateInternal('zone')) + ";custom="
+                            + "&period_id=999&relay_id=" + this.relayid(this.getStateInternal('zone')) + "&custom="
                             + this.getStateInternal('custom_run'));
                     this.log.info(hydrawise_url_command + "action=run&api_key=" + this.config.hydrawise_apikey
-                            + "&period_id=999&relay_id=" + this.relayid(this.getStateInternal('zone')) + ";custom="
+                            + "&period_id=999&relay_id=" + this.relayid(this.getStateInternal('zone')) + "&custom="
                             + this.getStateInternal('custom_run'));
                     this.sentProwlMessage(0, "run zone "+this.zonename(this.getStateInternal('zone'))+" for "+this.getStateInternal('custom_run')+" s");        
                     break;
