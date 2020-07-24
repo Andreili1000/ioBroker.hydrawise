@@ -17,8 +17,11 @@ var request = require('request');
 //
 var currentStateValues = {};  // always keep the last value of the state variables
 
+var testobj = {id:10;}
+
 var testVar = {type: "Test",
-               words:  ["Hello", "World"]
+               words:  ["Hello", "World"],
+               obj: [testobj, testobj]
               };
 
 //
@@ -29,16 +32,21 @@ var hydrawise_url_status     = "https://app.hydrawise.com/api/v1/statusschedule.
 
 
 //
-// hc controller state definition
+// hc6 controller state definition
 //
-var relay        = {name:"", period:0, relay:0, relay_id:0, run:0, time:0, timestr:"", type:0};
-var sensor       = {input:0, mode:0, offtimer:0, timer:0, type:0, relays:[0,0,0,0,0,0]};
-var hc          = {message: "",
-                    nextpoll: 0,
-                    time: 0,
-                    relays: [relay,relay,relay,relay,relay,relay],
-                    sensors: [sensor,sensor]
-                  };
+//var relay        = {name:"", period:0, relay:0, relay_id:0, run:0, time:0, timestr:"", type:0};
+//var sensor       = {input:0, mode:0, offtimer:0, timer:0, type:0, relays:[0,0,0,0,0,0]};
+//var hc6          = {message: "",
+//                    nextpoll: 0,
+//                    time: 0,
+//                    relays: [relay,relay,relay,relay,relay,relay],
+//                    sensors: [sensor,sensor]
+//                  };
+
+//var relay        = {name:"", period:0, relay:0, relay_id:0, run:0, time:0, timestr:"", type:0};
+//var sensor       = {input:0, mode:0, offtimer:0, timer:0, type:0, relays:[0,0,0,0,0,0]};
+var hc6          = {message: "", nextpoll: 0, time: 0, relays: [], sensors: []};
+
 
 class Hydrawise extends utils.Adapter {
 
@@ -110,14 +118,26 @@ class Hydrawise extends utils.Adapter {
       this.log.info("send: "+cmd);
       //request(cmd, function (error, response, body){
       request(cmd, (error, response, body) => {
+
+
+        /var relay        = {name:"", period:0, relay:0, relay_id:0, run:0, time:0, timestr:"", type:0};
+        //var sensor       = {input:0, mode:0, offtimer:0, timer:0, type:0, relays:[0,0,0,0,0,0]};
+        //var hc6          = {message: "",
+        //                    nextpoll: 0,
+        //                    time: 0,
+        //                    relays: [relay,relay,relay,relay,relay,relay],
+        //                    sensors: [sensor,sensor]
+        //                  };
+
+
         if (!error && response.statusCode == 200) {
           // parse JSON response from Hydrawise controller
           var obj = JSON.parse(body);
           // read device config
-          hc.nextpoll = parseInt(obj.nextpoll);
-          hc.time     = parseInt(obj.time);
-          hc.message  = obj.message;
-          this.log.info("nextpoll="+hc.nextpoll+" time="+hc.time+" message="+hc.message);
+          hc6.nextpoll = parseInt(obj.nextpoll);
+          hc6.time     = parseInt(obj.time);
+          hc6.message  = obj.message;
+          this.log.info("nextpoll="+hc6.nextpoll+" time="+hc6.time+" message="+hc6.message);
 
           testVar.words[1]="Adapter";
           this.log.info("testVar (inside)="+testVar.words[1]);
@@ -125,43 +145,55 @@ class Hydrawise extends utils.Adapter {
           // read all configured sensors
           for (let i=0; i<=1; i++){
             if (obj.sensors[i]!=null){
-              hc.sensors[i].input    = parseInt(obj.sensors[i].input);
-              hc.sensors[i].type     = parseInt(obj.sensors[i].type);
-              hc.sensors[i].mode     = parseInt(obj.sensors[i].mode);
-              hc.sensors[i].timer    = parseInt(obj.sensors[i].timer);
-              hc.sensors[i].offtimer = parseInt(obj.sensors[i].offtimer);
-              for (let j=0; j<=5; j++){
-                hc.sensors[i].relays[j]=0;
-                if (obj.sensors[i].relays[j]!=null) {hc.sensors[i].relays[j] = parseInt(obj.sensors[i].relays[j].id)};
-                this.log.info("sensor"+i+": relay"+j+": id="+hc.sensors[i].relays[j]);
+              var sensor = {input:    parseInt(obj.sensors[i].input,
+                            type:     parseInt(obj.sensors[i].type,
+                            mode:     parseInt(obj.sensors[i].mode,         
+                            timer:    parseInt(obj.sensors[i].timer,
+                            offtimer: parseInt(obj.sensors[i].offtimer 
+              }
+
+
+             // hc6.sensors[i].input    = parseInt(obj.sensors[i].input);
+             // hc6.sensors[i].type     = parseInt(obj.sensors[i].type);
+             // hc6.sensors[i].mode     = parseInt(obj.sensors[i].mode);
+             // hc6.sensors[i].timer    = parseInt(obj.sensors[i].timer);
+             // hc6.sensors[i].offtimer = parseInt(obj.sensors[i].offtimer);
+              
+             for (let j=0; j<=5; j++){
+                hc6.sensors[i].relays[j]=0;
+                if (obj.sensors[i].relays[j]!=null) {hc6.sensors[i].relays[j] = parseInt(obj.sensors[i].relays[j].id)};
+                this.log.info("sensor"+i+": relay"+j+": id="+hc6.sensors[i].relays[j]);
               }
             }
           }
+
+
+
           // read all configured relays
           for (let i=0; i<=5; i++){
             if (obj.relays[i]!=null){
-              hc.relays[i].relay_id  = parseInt(obj.relays[i].relay_id);
-              hc.relays[i].name      = obj.relays[i].name;
-              hc.relays[i].relay     = parseInt(obj.relays[i].relay);
-              hc.relays[i].type      = parseInt(obj.relays[i].type);
-              hc.relays[i].time      = parseInt(obj.relays[i].time);
-              hc.relays[i].run       = parseInt(obj.relays[i].run);
-              hc.relays[i].period    = parseInt(obj.relays[i].period);
-              hc.relays[i].timestr   = obj.relays[i].timestr;
+              hc6.relays[i].relay_id  = parseInt(obj.relays[i].relay_id);
+              hc6.relays[i].name      = obj.relays[i].name;
+              hc6.relays[i].relay     = parseInt(obj.relays[i].relay);
+              hc6.relays[i].type      = parseInt(obj.relays[i].type);
+              hc6.relays[i].time      = parseInt(obj.relays[i].time);
+              hc6.relays[i].run       = parseInt(obj.relays[i].run);
+              hc6.relays[i].period    = parseInt(obj.relays[i].period);
+              hc6.relays[i].timestr   = obj.relays[i].timestr;
             }
             else{
-              hc.relays[i].relay_id  = 0;
-              hc.relays[i].name      = "";
-              hc.relays[i].relay     = 0;
-              hc.relays[i].type      = 0;
-              hc.relays[i].time      = 0;
-              hc.relays[i].run       = 0;
-              hc.relays[i].period    = 0;
-              hc.relays[i].timestr   = "";
+              hc6.relays[i].relay_id  = 0;
+              hc6.relays[i].name      = "";
+              hc6.relays[i].relay     = 0;
+              hc6.relays[i].type      = 0;
+              hc6.relays[i].time      = 0;
+              hc6.relays[i].run       = 0;
+              hc6.relays[i].period    = 0;
+              hc6.relays[i].timestr   = "";
             }
-            this.log.info("relay"+i+": relay_id="+hc.relays[i].relay_id+" name="+hc.relays[i].name+
-            " relay="+hc.relays[i].relay+" type="+hc.relays[i].type+" time="+hc.relays[i].time+
-            " run="+hc.relays[i].run+" period="+hc.relays[i].period+" timestr="+hc.relays[i].timestr);
+            this.log.info("relay"+i+": relay_id="+hc6.relays[i].relay_id+" name="+hc6.relays[i].name+
+            " relay="+hc6.relays[i].relay+" type="+hc6.relays[i].type+" time="+hc6.relays[i].time+
+            " run="+hc6.relays[i].run+" period="+hc6.relays[i].period+" timestr="+hc6.relays[i].timestr);
           }
         }
       });
@@ -173,17 +205,17 @@ class Hydrawise extends utils.Adapter {
     //
     relayid(zone){
       let array_id = zone-1;
-      this.log.info("zone="+zone+" array_id="+array_id+" relay_id="+hc.relays[0].relay_id);
+      this.log.info("zone="+zone+" array_id="+array_id+" relay_id="+hc6.relays[0].relay_id);
       this.log.info("testVar (outside)="+testVar.words[1]);
-      this.log.info("nextpoll="+hc.nextpoll);
+      this.log.info("nextpoll="+hc6.nextpoll);
 
       for (let i=0; i<=5; i++){
-        this.log.info("relay"+i+": relay_id="+hc.relays[i].relay_id+" name="+hc.relays[i].name+
-        " relay="+hc.relays[i].relay+" type="+hc.relays[i].type+" time="+hc.relays[i].time+
-        " run="+hc.relays[i].run+" period="+hc.relays[i].period+" timestr="+hc.relays[i].timestr);
+        this.log.info("relay"+i+": relay_id="+hc6.relays[i].relay_id+" name="+hc6.relays[i].name+
+        " relay="+hc6.relays[i].relay+" type="+hc6.relays[i].type+" time="+hc6.relays[i].time+
+        " run="+hc6.relays[i].run+" period="+hc6.relays[i].period+" timestr="+hc6.relays[i].timestr);
       }
 
-      return hc.relays[array_id].relay_id;
+      return hc6.relays[array_id].relay_id;
     }
 
     /**
@@ -319,7 +351,7 @@ class Hydrawise extends utils.Adapter {
                   // run zone <zone> for <run> seconds
                   //
                   case "run":
-                    this.log.info("relay0-relay_id="+hc.relays[0].relay_id);
+                    this.log.info("relay0-relay_id="+hc6.relays[0].relay_id);
 
                     this.log.info(hydrawise_url_command + "action=run&api_key=" + this.config.hydrawise_apikey
                             + "&period_id=999&relay_id=" + this.relayid(this.getStateInternal('zone')) + ";custom="
