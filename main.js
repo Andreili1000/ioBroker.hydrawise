@@ -40,10 +40,20 @@ var hydrawise_url_status     = "https://app.hydrawise.com/api/v1/statusschedule.
 //                    sensors: [sensor,sensor]
 //                  };
 
-//var relay        = {name:"", period:0, relay:0, relay_id:0, run:0, time:0, timestr:"", type:0};
-//var sensor       = {input:0, mode:0, offtimer:0, timer:0, type:0, relays:[0,0,0,0,0,0]};
-var hc6          = {message: "", nextpoll: 0, time: 0, relays: [], sensors: []};
-
+var hc6          = {message: "", 
+                    nextpoll: 0, 
+                    time: 0, 
+                    relays:  [{name:"", period:0, relay:0, relay_id:0, run:0, time:0, timestr:"", type:0},
+                              {name:"", period:0, relay:0, relay_id:0, run:0, time:0, timestr:"", type:0},
+                              {name:"", period:0, relay:0, relay_id:0, run:0, time:0, timestr:"", type:0},
+                              {name:"", period:0, relay:0, relay_id:0, run:0, time:0, timestr:"", type:0},
+                              {name:"", period:0, relay:0, relay_id:0, run:0, time:0, timestr:"", type:0},
+                              {name:"", period:0, relay:0, relay_id:0, run:0, time:0, timestr:"", type:0}
+                             ], 
+                    sensors: [{input:0, mode:0, offtimer:0, timer:0, type:0, relays:[0,0,0,0,0,0]},
+                              {input:0, mode:0, offtimer:0, timer:0, type:0, relays:[0,0,0,0,0,0]}   
+                             ]
+                  };
 
 class Hydrawise extends utils.Adapter {
 
@@ -116,17 +126,6 @@ class Hydrawise extends utils.Adapter {
       //request(cmd, function (error, response, body){
       request(cmd, (error, response, body) => {
 
-
-        //var relay        = {name:"", period:0, relay:0, relay_id:0, run:0, time:0, timestr:"", type:0};
-        //var sensor       = {input:0, mode:0, offtimer:0, timer:0, type:0, relays:[0,0,0,0,0,0]};
-        //var hc6          = {message: "",
-        //                    nextpoll: 0,
-        //                    time: 0,
-        //                    relays: [relay,relay,relay,relay,relay,relay],
-        //                    sensors: [sensor,sensor]
-        //                  };
-
-
         if (!error && response.statusCode == 200) {
           // parse JSON response from Hydrawise controller
           var obj = JSON.parse(body);
@@ -143,26 +142,24 @@ class Hydrawise extends utils.Adapter {
           for (let i=0; i<=1; i++){
             // if sensor is configured
             if (obj.sensors[i]!=null){
+              hc6.sensors[i].input = parseInt(obj.sensors[i].input);
+              hc6.sensors[i].type = parseInt(obj.sensors[i].type);
+              hc6.sensors[i].mode = parseInt(obj.sensors[i].mode);
+              hc6.sensors[i].timer = parseInt(obj.sensors[i].timer);
+              hc6.sensors[i].offtimer = parseInt(obj.sensors[i].offtimer);
               // read all related relays
-              let relays = [];
               for (let j=0; j<=5; j++){
                 // if relay is configured
-                if (obj.sensors[i].relays[j]!=null){relays.push(parseInt(obj.sensors[i].relays[j].id))}
-                // otherwise use relay_id 0
-                else{relays.push(0)}
+                if (obj.sensors[i].relays[j]!=null){
+                  hc6.sensors[i].relays[j].id=obj.sensors[i].relays[j].id
+                }
               };
-              let sensor = {input:    parseInt(obj.sensors[i].input),
-                            type:     parseInt(obj.sensors[i].type),
-                            mode:     parseInt(obj.sensors[i].mode),         
-                            timer:    parseInt(obj.sensors[i].timer),
-                            offtimer: parseInt(obj.sensors[i].offtimer),
-                            relays:   relays
-                           }
-              hc6.sensors.push(sensor);             
             }
+            this.log.info("sensor"+i+": input="+hc6.sensors[i].input+" type="+hc6.sensors[i].type+
+            " mode="+hc6.sensors[i].mode+ " timer="+hc6.sensors[i].timer+" offtimer="+hc6.sensors[i].offtimer+
+            " relay0="+hc6.sensors[i].relays[0].id+" relay1="+hc6.sensors[i].relays[1].id+" relay2="+hc6.sensors[i].relays[2].id+
+            " relay3="+hc6.sensors[i].relays[3].id+" relay4="+hc6.sensors[i].relays[4].id+" relay5="+hc6.sensors[i].relays[5].id);
           }
-
-
 
           // read all configured relays
           for (let i=0; i<=5; i++){
