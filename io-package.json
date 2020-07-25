@@ -81,7 +81,7 @@
           "role": "value",
           "read": true,
           "write": true,
-          "def": 0,
+          "def": 1,
           "desc": "zone number 1-6 to execute command for"
         },
         "native": {}
@@ -95,7 +95,7 @@
           "role": "value",
           "read": true,
           "write": true,
-          "def": 0,
+          "def": 120,
           "desc": "number of seconds to run zone(s) for"
         },
         "native": {}

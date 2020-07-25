@@ -57,6 +57,8 @@ var hc6          = {message: "",
 const run_min = 120;    // minimum runtime = 2 Minutes
 const run_max = 5400;   // maximum runtime = 1h30 min
 
+var runtime = run_min;  // runtime which is used in REST API command
+
 class Hydrawise extends utils.Adapter {
 
     /**
@@ -344,8 +346,6 @@ class Hydrawise extends utils.Adapter {
                   // run zone <zone> for <custom_run> seconds
                   //
                   case "run":
-                    let runtime = this.runtime_limit(this.getStateInternal('custom_run'));
-
                     request(hydrawise_url_command + "action=run&api_key=" + this.config.hydrawise_apikey
                             + "&period_id=999&relay_id=" + this.relayid(this.getStateInternal('zone')) + "&custom="
                             + runtime);
@@ -358,8 +358,6 @@ class Hydrawise extends utils.Adapter {
                   // run all zones for <custom_run> seconds
                   //       
                   case "runall":
-                    let runtime = this.runtime_limit(this.getStateInternal('custom_run'));
-
                     request(hydrawise_url_command + "action=runall&api_key=" + this.config.hydrawise_apikey + "&period_id=999&custom="+ runtime);
                     this.log.info(hydrawise_url_command + "action=runall&api_key=" + this.config.hydrawise_apikey + "&period_id=999&&custom="+ runtime);
                     this.sentProwlMessage(0, "Run all zones for "+runtime+" s");      
@@ -418,7 +416,11 @@ class Hydrawise extends utils.Adapter {
                     this.log.info("Command \""+state.val+"\" is unknown");
                     break;  
                 }
-              break;
+                break;
+              // limit runtime to run_min resp. run_max
+              case this.namespace + '.custom_run':
+                runtime = this.runtime_limit(this.getStateInternal('custom_run'));
+                break;
             }
 
         } else {
