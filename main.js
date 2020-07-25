@@ -222,23 +222,14 @@ class Hydrawise extends utils.Adapter {
 
         // The adapters config (in the instance object everything under the attribute "native") is accessible via
         // this.config:
-        //hydrawise_api = this.config.hydrawise_apikey;
-        //this.log.info('Hydrawise API key: ' + hydrawise_api);
-        //prowl_api = this.config.prowl_apikey;
-        //this.log.info('Prowl API key: ' + prowl_api);
+        
+        // initialize internal copy of state variables
+        this.setStateInternal('custom_run', this.custom_run);
+        this.setStateInternal('custom_suspend', this.custom_suspend);
+        this.setStateInternal('zone', this.zone);
 
-
-       // initialize internal copy of state variables
-       //this.setStateInternal('custom_run', 0);
-       //this.setStateInternal('custom_suspend', 0);
-       //this.setStateInternal('zone',0);
-
-       this.setStateInternal('custom_run', this.namespace.custom_run);
-       this.setStateInternal('custom_suspend', this.namespace.custom_suspend);
-       this.setStateInternal('zone',this.namespace.zone);
-
-       // initialize hc information from controller
-       this.readHydrawiseStatus();
+        // initialize hc information from controller
+        this.readHydrawiseStatus();
 
         /*
         For every state in the system there has to be also an object of type state
