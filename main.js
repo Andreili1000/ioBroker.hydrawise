@@ -51,6 +51,12 @@ var hc6          = {message: "",
                              ]
                   };
 
+//
+// constants
+//
+const run_min = 120;    // minimum runtime = 2 Minutes
+const run_max = 5400;   // maximum runtime = 1h30 min
+
 class Hydrawise extends utils.Adapter {
 
     /**
@@ -178,23 +184,33 @@ class Hydrawise extends utils.Adapter {
     }
 
     //
-    // retrieves relay_id of Zone 1..6
+    // retrieves relay_id of Zone 1..6, returns 0 if out of range
     //
     relayid(zone){
+      if (zone<1 || zone>6) {this.log.info("invalid zone number: "+zone);return 0};
       return hc6.relays[zone-1].relay_id;
     }
 
     //
-    // retrieves name of Zone 1..6
+    // retrieves name of Zone 1..6, returns "unknown" if relay_id = 0 (out of range / not defined)
     //
     zonename(zone){
       let relay_id = this.relayid(zone);
+      if (relay_id == 0) return "unknown";
       for (let i=0; i<=5; i++){
         if (hc6.relays[i].relay_id==relay_id){return hc6.relays[i].name}
       };
       return "unknown"
     }
 
+    //
+    // limits runtime to defined run_min resp. run_max values
+    //
+    runtime_limit(runtime){
+      if (runtime<run_min) {this.log.info("runtime limited to "+run_min+" s");return run_min};
+      if (runtime>run_max) {this.log.info("runtime limited to "+run_max+" s");return run_max};
+      return runtime;
+    }
 
     /**
      * Is called when databases are connected and adapter received configuration.
@@ -325,44 +341,81 @@ class Hydrawise extends utils.Adapter {
               case this.namespace + '.command':
                 switch (state.val){
                   //
-                  // run zone <zone> for <run> seconds
+                  // run zone <zone> for <custom_run> seconds
                   //
                   case "run":
+                    let runtime = this.runtime_limit(this.getStateInternal('custom_run'));
+
                     request(hydrawise_url_command + "action=run&api_key=" + this.config.hydrawise_apikey
                             + "&period_id=999&relay_id=" + this.relayid(this.getStateInternal('zone')) + "&custom="
-                            + this.getStateInternal('custom_run'));
+                            + runtime);
                     this.log.info(hydrawise_url_command + "action=run&api_key=" + this.config.hydrawise_apikey
                             + "&period_id=999&relay_id=" + this.relayid(this.getStateInternal('zone')) + "&custom="
-                            + this.getStateInternal('custom_run'));
-                    this.sentProwlMessage(0, "run zone "+this.zonename(this.getStateInternal('zone'))+" for "+this.getStateInternal('custom_run')+" s");        
+                            + runtime);
+                    this.sentProwlMessage(0, "Run zone "+this.zonename(this.getStateInternal('zone'))+" for "+runtime+" s");        
                     break;
+                  //
+                  // run all zones for <custom_run> seconds
+                  //       
+                  case "runall":
+                    let runtime = this.runtime_limit(this.getStateInternal('custom_run'));
 
+                    request(hydrawise_url_command + "action=runall&api_key=" + this.config.hydrawise_apikey + "&period_id=999&custom="+ runtime);
+                    this.log.info(hydrawise_url_command + "action=runall&api_key=" + this.config.hydrawise_apikey + "&period_id=999&&custom="+ runtime);
+                    this.sentProwlMessage(0, "Run all zones for "+runtime+" s");      
+                    break;
+                  //
+                  // stop zone <zone>
+                  //
                   case "stop":
                     request(hydrawise_url_command + "action=stop&api_key=" + this.config.hydrawise_apikey
                             + "&period_id=999&relay_id=" + this.relayid(this.getStateInternal('zone')));
                     this.log.info(hydrawise_url_command + "action=stop&api_key=" + this.config.hydrawise_apikey
                             + "&period_id=999&relay_id=" + this.relayid(this.getStateInternal('zone')));
-                    this.sentProwlMessage(0, "stop zone "+this.zonename(this.getStateInternal('zone')));   
+                    this.sentProwlMessage(0, "Stop zone "+this.zonename(this.getStateInternal('zone')));   
                     break;
-                    
-                  case "suspend":
-                    this.log.info("execute suspend");
-                    break;
-                  case "runall":
-                    this.log.info("execute runall");
-                    break;
+                  //
+                  // stop all zones
+                  //  
                   case "stopall":
-                    this.log.info("execute stopall");
+                    request(hydrawise_url_command + "action=stopall&api_key=" + this.config.hydrawise_apikey);
+                    this.log.info(hydrawise_url_command + "action=stopall&api_key=" + this.config.hydrawise_apikey);
+                    this.sentProwlMessage(0, "Stop all zones");   
                     break;
+                  //
+                  // suspend zone <zone> until <custom_suspend>
+                  //  
+                  case "suspend":
+                    request(hydrawise_url_command + "action=suspend&api_key=" + this.config.hydrawise_apikey
+                            + "&period_id=999&relay_id=" + this.relayid(this.getStateInternal('zone')) + "&custom="
+                            + this.getStateInternal('custom_suspend'));
+                    this.log.info(hydrawise_url_command + "action=suspend&api_key=" + this.config.hydrawise_apikey
+                            + "&period_id=999&relay_id=" + this.relayid(this.getStateInternal('zone')) + "&custom="
+                            + this.getStateInternal('custom_suspend'));
+                    this.sentProwlMessage(0, "Suspend zone "+this.zonename(this.getStateInternal('zone'))+" for "+this.getStateInternal('custom_suspend')+" s");   
+                    break;
+                  //     
+                  // suspend all zones until <custom_suspend>
+                  //
                   case "suspendall":
-                    this.log.info("execute suspendall");
+                      request(hydrawise_url_command + "action=suspendall&api_key=" + this.config.hydrawise_apikey 
+                              + "&period_id=999&custom="+ this.getStateInternal('custom_suspend'));
+                      this.log.info(hydrawise_url_command + "action=suspendall&api_key=" + this.config.hydrawise_apikey
+                             + "&period_id=999&custom="+ this.getStateInternal('custom_suspend'));
+                      this.sentProwlMessage(0, "Suspend all zones for "+this.getStateInternal('custom_suspend')+" s");   
                     break;
+                  //
+                  // read controller configuration
+                  //
                   case "readstatus":
-                    this.log.info("execute readstatus");
                     this.readHydrawiseStatus();
+                    this.log.info("read status of HC6 controller");
                     break;
-                  case "test":
-                    this.sentProwlMessage(0, "ProwlTest")
+                  //
+                  // command not implemented
+                  //
+                  default:
+                    this.log.info("Command \""+state.val+"\" is unknown");
                     break;  
                 }
               break;
