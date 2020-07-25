@@ -224,9 +224,9 @@ class Hydrawise extends utils.Adapter {
         // this.config:
         
         // initialize internal copy of state variables
-        this.setStateInternal('custom_run', this.custom_run);
-        this.setStateInternal('custom_suspend', this.custom_suspend);
-        this.setStateInternal('zone', this.zone);
+        this.setStateInternal('custom_run', 120);
+        this.setStateInternal('custom_suspend', 0);
+        this.setStateInternal('zone', 1);
 
         // initialize hc information from controller
         this.readHydrawiseStatus();
