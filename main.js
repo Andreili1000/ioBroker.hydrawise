@@ -228,8 +228,8 @@ class Hydrawise extends utils.Adapter {
         this.setStateInternal('custom_suspend', 0);
         this.setStateInternal('zone', 1);
 
-        // initialize hc information from controller
-        this.readHydrawiseStatus();
+        // initialize hc information from controller when api key has been set via config page
+        if (this.config.hydrawise_apikey!=undefined){this.readHydrawiseStatus()};
 
         /*
         For every state in the system there has to be also an object of type state
