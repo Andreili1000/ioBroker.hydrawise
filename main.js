@@ -119,70 +119,73 @@ class Hydrawise extends utils.Adapter {
     readHydrawiseStatus(){
       const cmd = hydrawise_url_status + "api_key=" + this.config.hydrawise_apikey;
 
-      this.log.info("send: "+cmd);
-      //request(cmd, function (error, response, body){
-      request(cmd, (error, response, body) => {
+      // execute only if apikey is defined in config page
+      if (this.config.hydrawise_apikey!=undefined){
+        this.log.info("send: "+cmd);
+        //request(cmd, function (error, response, body){
+        request(cmd, (error, response, body) => {
 
-        if (!error && response.statusCode == 200) {
-          // parse JSON response from Hydrawise controller
-          var obj = JSON.parse(body);
-          // read device config
-          hc6.nextpoll = parseInt(obj.nextpoll);
-          hc6.time     = parseInt(obj.time);
-          hc6.message  = obj.message;
-          this.log.info("nextpoll="+hc6.nextpoll+" time="+hc6.time+" message="+hc6.message);
+          if (!error && response.statusCode == 200) {
+            // parse JSON response from Hydrawise controller
+            var obj = JSON.parse(body);
+            // read device config
+            hc6.nextpoll = parseInt(obj.nextpoll);
+            hc6.time     = parseInt(obj.time);
+            hc6.message  = obj.message;
+            this.log.info("nextpoll="+hc6.nextpoll+" time="+hc6.time+" message="+hc6.message);
  
-          // read all configured sensors
-          for (let i=0; i<=1; i++){
-            // if sensor is configured
-            if (obj.sensors[i]!=null){
-              hc6.sensors[i].input = parseInt(obj.sensors[i].input);
-              hc6.sensors[i].type = parseInt(obj.sensors[i].type);
-              hc6.sensors[i].mode = parseInt(obj.sensors[i].mode);
-              hc6.sensors[i].timer = parseInt(obj.sensors[i].timer);
-              hc6.sensors[i].offtimer = parseInt(obj.sensors[i].offtimer);
-              // read all related relays
-              for (let j=0; j<=5; j++){
-                // if relay is configured
-                if (obj.sensors[i].relays[j]!=null){
-                  hc6.sensors[i].relays[j]=obj.sensors[i].relays[j].id
-                }
-              };
+            // read all configured sensors
+            for (let i=0; i<=1; i++){
+              // if sensor is configured
+              if (obj.sensors[i]!=null){
+                hc6.sensors[i].input = parseInt(obj.sensors[i].input);
+                hc6.sensors[i].type = parseInt(obj.sensors[i].type);
+                hc6.sensors[i].mode = parseInt(obj.sensors[i].mode);
+                hc6.sensors[i].timer = parseInt(obj.sensors[i].timer);
+                hc6.sensors[i].offtimer = parseInt(obj.sensors[i].offtimer);
+                // read all related relays
+                for (let j=0; j<=5; j++){
+                  // if relay is configured
+                  if (obj.sensors[i].relays[j]!=null){
+                    hc6.sensors[i].relays[j]=obj.sensors[i].relays[j].id
+                  }
+                };
+              }
+              this.log.info("sensor"+i+": input="+hc6.sensors[i].input+" type="+hc6.sensors[i].type+
+              " mode="+hc6.sensors[i].mode+ " timer="+hc6.sensors[i].timer+" offtimer="+hc6.sensors[i].offtimer+
+              " relay0="+hc6.sensors[i].relays[0]+" relay1="+hc6.sensors[i].relays[1]+" relay2="+hc6.sensors[i].relays[2]+
+              " relay3="+hc6.sensors[i].relays[3]+" relay4="+hc6.sensors[i].relays[4]+" relay5="+hc6.sensors[i].relays[5]);
             }
-            this.log.info("sensor"+i+": input="+hc6.sensors[i].input+" type="+hc6.sensors[i].type+
-            " mode="+hc6.sensors[i].mode+ " timer="+hc6.sensors[i].timer+" offtimer="+hc6.sensors[i].offtimer+
-            " relay0="+hc6.sensors[i].relays[0]+" relay1="+hc6.sensors[i].relays[1]+" relay2="+hc6.sensors[i].relays[2]+
-            " relay3="+hc6.sensors[i].relays[3]+" relay4="+hc6.sensors[i].relays[4]+" relay5="+hc6.sensors[i].relays[5]);
-          }
 
-          // read all configured relays
-          for (let i=0; i<=5; i++){
-            if (obj.relays[i]!=null){
-              hc6.relays[i].relay_id  = parseInt(obj.relays[i].relay_id);
-              hc6.relays[i].name      = obj.relays[i].name;
-              hc6.relays[i].relay     = parseInt(obj.relays[i].relay);
-              hc6.relays[i].type      = parseInt(obj.relays[i].type);
-              hc6.relays[i].time      = parseInt(obj.relays[i].time);
-              hc6.relays[i].run       = parseInt(obj.relays[i].run);
-              hc6.relays[i].period    = parseInt(obj.relays[i].period);
-              hc6.relays[i].timestr   = obj.relays[i].timestr;
+            // read all configured relays
+            for (let i=0; i<=5; i++){
+              if (obj.relays[i]!=null){
+                hc6.relays[i].relay_id  = parseInt(obj.relays[i].relay_id);
+                hc6.relays[i].name      = obj.relays[i].name;
+                hc6.relays[i].relay     = parseInt(obj.relays[i].relay);
+                hc6.relays[i].type      = parseInt(obj.relays[i].type);
+                hc6.relays[i].time      = parseInt(obj.relays[i].time);
+                hc6.relays[i].run       = parseInt(obj.relays[i].run);
+                hc6.relays[i].period    = parseInt(obj.relays[i].period);
+                hc6.relays[i].timestr   = obj.relays[i].timestr;
+              }
+              else{
+                hc6.relays[i].relay_id  = 0;
+                hc6.relays[i].name      = "";
+                hc6.relays[i].relay     = 0;
+                hc6.relays[i].type      = 0;
+                hc6.relays[i].time      = 0;
+                hc6.relays[i].run       = 0;
+                hc6.relays[i].period    = 0;
+                hc6.relays[i].timestr   = "";
+              }
+              this.log.info("relay"+i+": relay_id="+hc6.relays[i].relay_id+" name="+hc6.relays[i].name+
+              " relay="+hc6.relays[i].relay+" type="+hc6.relays[i].type+" time="+hc6.relays[i].time+
+              " run="+hc6.relays[i].run+" period="+hc6.relays[i].period+" timestr="+hc6.relays[i].timestr);
             }
-            else{
-              hc6.relays[i].relay_id  = 0;
-              hc6.relays[i].name      = "";
-              hc6.relays[i].relay     = 0;
-              hc6.relays[i].type      = 0;
-              hc6.relays[i].time      = 0;
-              hc6.relays[i].run       = 0;
-              hc6.relays[i].period    = 0;
-              hc6.relays[i].timestr   = "";
-            }
-            this.log.info("relay"+i+": relay_id="+hc6.relays[i].relay_id+" name="+hc6.relays[i].name+
-            " relay="+hc6.relays[i].relay+" type="+hc6.relays[i].type+" time="+hc6.relays[i].time+
-            " run="+hc6.relays[i].run+" period="+hc6.relays[i].period+" timestr="+hc6.relays[i].timestr);
           }
-        }
-      });
+        })
+      }
     }
 
     //
@@ -229,7 +232,7 @@ class Hydrawise extends utils.Adapter {
         this.setStateInternal('zone', 1);
 
         // initialize hc information from controller when api key has been set via config page
-        if (this.config.hydrawise_apikey!=undefined){this.readHydrawiseStatus()};
+        this.readHydrawiseStatus();
 
         /*
         For every state in the system there has to be also an object of type state
