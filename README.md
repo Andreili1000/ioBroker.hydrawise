@@ -61,7 +61,7 @@ This command will suspend all zones until \<custom_suspend\>.
 #### readstatus
 
 This command will read in the hydrawise controller configurations. This is done automatically once the adapter starts.
-The configuration must be re-read whenever the hydrawise controller congiration has changed since the adapter start.
+The configuration must be re-read whenever the hydrawise controller configuration has changed since the adapter start.
 
 
 #### Changelog
