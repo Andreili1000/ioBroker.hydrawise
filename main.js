@@ -83,9 +83,9 @@ class Hydrawise extends utils.Adapter {
 
     }
 
-    //
+    // =======================================================================
     // reads value out of local copy of state variable "id"
-    //
+    // =======================================================================
     getStateInternal(id) {
      var obj = id;
      if (! obj.startsWith(this.namespace + '.'))
@@ -93,9 +93,9 @@ class Hydrawise extends utils.Adapter {
      return currentStateValues[obj];
     }
 
-    //
+    // =======================================================================
     // updates local copy of state variable "id" with value "value"
-    //
+    // =======================================================================
     setStateInternal(id, value) {
      var obj = id;
      if (! obj.startsWith(this.namespace + '.'))
@@ -104,9 +104,9 @@ class Hydrawise extends utils.Adapter {
      currentStateValues[obj] = value;
     }
 
-    //
+    // =======================================================================
     // sents push message via prowl
-    //
+    // =======================================================================
     sentProwlMessage(priority, message) {
 
       this.log.debug(prowl_url + this.config.prowl_apikey + "&application=" + this.namespace
@@ -116,6 +116,10 @@ class Hydrawise extends utils.Adapter {
         + "&priority=" + priority + "&description="+message);
     }
 
+    // =======================================================================
+    // read in controller configuration
+    // (shall be done @ beginning define sensors, relays, zones...)
+    // =======================================================================
     readHydrawiseStatus(){
       const cmd = hydrawise_url_status + "api_key=" + this.config.hydrawise_apikey;
 
@@ -188,17 +192,18 @@ class Hydrawise extends utils.Adapter {
       }
     }
 
-    //
+    // =======================================================================
     // retrieves relay_id of Zone 1..6, returns 0 if out of range
-    //
+    // (remark: using zone 0 in the commands will have no effect)
+    // =======================================================================
     relayid(zone){
       if (zone<1 || zone>6) {this.log.info("invalid zone number: "+zone);return 0};
       return hc6.relays[zone-1].relay_id;
     }
 
-    //
+    // =======================================================================
     // retrieves name of Zone 1..6, returns "unknown" if relay_id = 0 (out of range / not defined)
-    //
+    // =======================================================================
     zonename(zone){
       let relay_id = this.relayid(zone);
       if (relay_id == 0) return "unknown";
@@ -208,9 +213,9 @@ class Hydrawise extends utils.Adapter {
       return "unknown"
     }
 
-    //
+    // =======================================================================
     // limits runtime to defined run_min resp. run_max values
-    //
+    // =======================================================================
     runtime_limit(runtime){
       if (runtime<run_min) {this.log.info("runtime limited to "+run_min+" s");return run_min};
       if (runtime>run_max) {this.log.info("runtime limited to "+run_max+" s");return run_max};
@@ -227,9 +232,9 @@ class Hydrawise extends utils.Adapter {
         // this.config:
         
         // initialize internal copy of state variables
-        this.setStateInternal('custom_run', 120);
-        this.setStateInternal('custom_suspend', 0);
-        this.setStateInternal('zone', 1);
+        this.setStateInternal('custom_run', 120);        // set to 2 min
+        this.setStateInternal('custom_suspend', 0);      // set to invalid UNIX epoche - no effect
+        this.setStateInternal('zone', 1);                // set to zone 1
 
         // initialize hc information from controller when api key has been set via config page
         this.readHydrawiseStatus();

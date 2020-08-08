@@ -15,27 +15,60 @@
 ## Hydrawise adapter for ioBroker
 
 This adapter controls a Hydrawise HC6 from Hunter via the REST API Version 1.4.
+Commands are executed and the status of execution is reported via a PROWL interface by push messages which can e.g. being received by a smart phone. Activities of the adapter are also displayed in the info.log of the adapter.
+
+### Adapter Configuration Page
+
+In order to connect to the hydrawise adapter its unique API key has to be configured (<API Key Hydrawise Adapter>).
+The API key can be generated via the webpage of your hydrawise account in the section "My Account / API key".
+
+In order to sent push messages to e.g. a smart phone via PROWL your unique PROWL API key has to be configured (<API Key Prowl Account>).
+You can also leave out the PROWL configuration without impacting the hydrawise command execution if you don't have an PROWL account.
 
 ### Implemented Commands
 
-#### Status
+Commands are issued by setting the state variable <command> in the hydrawise adapter object section.
+Always set the necessary parameters for the commands first, before you are writing the <command> state variable.
 
-#### Runall
+The following commands are implemented:
 
-#### Stopall
+#### run
 
-#### Suspendall
+This command will run zone <zone> for <custom_run> seconds.
 
-#### Run Zone
+#### runall
 
-#### Stop Zone
+This command will run all zones for <custom_run> seconds.
 
-#### Suspend Zone
+#### stop
+
+This command will stop zone <zone> immediately.
+
+#### stopall
+
+This command will stop all zones immediately.
+
+#### suspend
+
+This command will suspend zone <zone> until <custom_suspend>. 
+<custom_suspend> is given in the UNIX time epoche format. For conversion see: (https://www.unixtime.de)
+
+#### suspendall
+
+This command will suspend all zones until <custom_suspend>. 
+<custom_suspend> is given in the UNIX time epoche format. For conversion see: (https://www.unixtime.de)
+
+#### readstatus
+
+This command will read in the hydrawise controller configurations. This is done automatically once the adapter starts.
+The configuration must be re-read whenever the hydrawise controller congiration has changed since the adapter start.
+
 
 #### Changelog
 
 ### 0.0.1
 * (Andreili1000) initial release
+
 
 ## License
 MIT License
